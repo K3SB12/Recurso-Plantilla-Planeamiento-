@@ -2632,81 +2632,166 @@
         }
 
         function exportarAPDF() {
-            try {
-                console.log("Iniciando exportación a PDF...");
-                
-                // OBTENER VALORES DE CHECKBOXES
-                const nombreArchivo = document.getElementById('nombreArchivo').value || 'Planeamiento-Didáctico';
-                const exportarInformacionGeneral = document.getElementById('exportarInformacionGeneral')?.checked ?? true;
-                const exportarSaberes = document.getElementById('exportarSaberes')?.checked ?? true;
-                const exportarSemanas = document.getElementById('exportarSemanas')?.checked ?? true;
-                const exportarReflexiones = document.getElementById('exportarReflexiones')?.checked ?? true;
-                const exportarSaberesGlobales = document.getElementById('exportarSaberesGlobales')?.checked ?? true;
-                const incluirEncabezado = document.getElementById('incluirEncabezado')?.checked ?? true;
-                const incluirPiePagina = document.getElementById('incluirPiePagina')?.checked ?? true;
-                
-                // ÁREAS ÚNICAS
-                const areasUnicas = new Set();
-                semanas.forEach(semana => {
-                    semana.areas.forEach(area => areasUnicas.add(area));
-                });
-                
-                // ===== MÉTODO DEFINITIVO: Convertir a texto plano con formato controlado =====
-                function limpiarContenidoParaPDF(texto) {
-                    if (!texto || texto.toString().trim() === '') {
-                        return 'No especificado';
-                    }
-                    
-                    let contenido = texto.toString();
-                    
-                    // 1. Convertir HTML a texto plano controlado
-                    // Eliminar todas las etiquetas HTML
-                    contenido = contenido.replace(/<[^>]*>/g, ' ');
-                    
-                    // 2. Convertir entidades HTML
-                    contenido = contenido.replace(/&nbsp;/g, ' ');
-                    contenido = contenido.replace(/&lt;/g, '<');
-                    contenido = contenido.replace(/&gt;/g, '>');
-                    contenido = contenido.replace(/&amp;/g, '&');
-                    contenido = contenido.replace(/&quot;/g, '"');
-                    contenido = contenido.replace(/&#39;/g, "'");
-                    
-                    // 3. Normalizar espacios
-                    contenido = contenido.replace(/\s+/g, ' ');
-                    contenido = contenido.trim();
-                    
-                    return contenido;
+    try {
+        console.log("Iniciando exportación a PDF...");
+        
+        // OBTENER VALORES DE CHECKBOXES
+        const nombreArchivo = document.getElementById('nombreArchivo').value || 'Planeamiento-Didáctico';
+        const exportarInformacionGeneral = document.getElementById('exportarInformacionGeneral')?.checked ?? true;
+        const exportarSaberes = document.getElementById('exportarSaberes')?.checked ?? true;
+        const exportarSemanas = document.getElementById('exportarSemanas')?.checked ?? true;
+        const exportarReflexiones = document.getElementById('exportarReflexiones')?.checked ?? true;
+        const exportarSaberesGlobales = document.getElementById('exportarSaberesGlobales')?.checked ?? true;
+        const incluirEncabezado = document.getElementById('incluirEncabezado')?.checked ?? true;
+        const incluirPiePagina = document.getElementById('incluirPiePagina')?.checked ?? true;
+        
+        // ÁREAS ÚNICAS
+        const areasUnicas = new Set();
+        semanas.forEach(semana => {
+            semana.areas.forEach(area => areasUnicas.add(area));
+        });
+        
+        // ===== FUNCIONES AUXILIARES MEJORADAS =====
+        function limpiarContenidoParaPDF(texto) {
+            if (!texto || texto.toString().trim() === '') {
+                return 'No especificado';
+            }
+            
+            let contenido = texto.toString();
+            
+            // 1. Convertir HTML a texto plano controlado
+            contenido = contenido.replace(/<[^>]*>/g, ' ');
+            
+            // 2. Convertir entidades HTML
+            contenido = contenido.replace(/&nbsp;/g, ' ');
+            contenido = contenido.replace(/&lt;/g, '<');
+            contenido = contenido.replace(/&gt;/g, '>');
+            contenido = contenido.replace(/&amp;/g, '&');
+            contenido = contenido.replace(/&quot;/g, '"');
+            contenido = contenido.replace(/&#39;/g, "'");
+            
+            // 3. Normalizar espacios
+            contenido = contenido.replace(/\s+/g, ' ');
+            contenido = contenido.trim();
+            
+            return contenido;
+        }
+        
+        function formatearContenidoComoHTML(texto) {
+            const contenidoLimpio = limpiarContenidoParaPDF(texto);
+            
+            // Si está vacío
+            if (contenidoLimpio === 'No especificado' || contenidoLimpio.trim() === '') {
+                return '<div style="color: #999; font-style: italic; font-size: 8.5pt;">No especificado</div>';
+            }
+            
+            // Dividir por puntos para mejor legibilidad
+            const lineas = contenidoLimpio.split(/(?<=\.)\s+/).filter(linea => linea.trim());
+            
+            if (lineas.length === 0) {
+                return '<div style="color: #999; font-style: italic; font-size: 8.5pt;">No especificado</div>';
+            }
+            
+            // Crear párrafos más compactos para PDF
+            let resultado = '';
+            
+            lineas.forEach(linea => {
+                // Si es una lista con números o viñetas
+                if (linea.match(/^\d+[-).]/) || linea.match(/^[•\-]/)) {
+                    resultado += `<div style="margin-bottom: 1.5mm; padding-left: 1mm; line-height: 1.3; font-size: 8.5pt;">${linea.trim()}</div>`;
+                } else {
+                    resultado += `<div style="margin-bottom: 1.5mm; line-height: 1.3; font-size: 8.5pt; text-indent: 2mm;">${linea.trim()}</div>`;
                 }
+            });
+            
+            return resultado;
+        }
+        
+        // ✅ FUNCIÓN NUEVA: AJUSTAR FUENTE SEGÚN LONGITUD
+        function ajustarFuenteSegunLongitud(texto) {
+            if (!texto || texto.toString().trim() === '') return '9.5pt';
+            
+            const contenidoLimpio = limpiarContenidoParaPDF(texto);
+            const longitud = contenidoLimpio.length;
+            
+            // Escala progresiva según longitud
+            if (longitud > 3000) return '7.5pt';      // Contenido muy largo
+            if (longitud > 2000) return '8pt';        // Contenido largo
+            if (longitud > 1000) return '8.5pt';      // Contenido medio-largo
+            if (longitud > 500) return '9pt';         // Contenido medio
+            return '9.5pt';                           // Contenido corto
+        }
+        
+        // ✅ FUNCIÓN NUEVA: AJUSTAR ALTURA MÍNIMA SEGÚN CONTENIDO
+        function ajustarAlturaMinima(texto) {
+            if (!texto || texto.toString().trim() === '') return '25mm';
+            
+            const contenidoLimpio = limpiarContenidoParaPDF(texto);
+            const longitud = contenidoLimpio.length;
+            
+            // Ajustar altura mínima según longitud
+            if (longitud > 2000) return '60mm';
+            if (longitud > 1000) return '45mm';
+            if (longitud > 500) return '35mm';
+            return '25mm';
+        }
+        
+        // ✅ FUNCIÓN NUEVA: FORMATEAR CONTENIDO CON AJUSTE DINÁMICO
+        function formatearContenidoConAjuste(texto, tipoContenido = 'general') {
+            const contenidoLimpio = limpiarContenidoParaPDF(texto);
+            
+            // Si está vacío
+            if (contenidoLimpio === 'No especificado' || contenidoLimpio.trim() === '') {
+                return {
+                    html: '<div style="color: #999; font-style: italic;">No especificado</div>',
+                    fontSize: '9pt',
+                    minHeight: '25mm'
+                };
+            }
+            
+            // Determinar tamaño de fuente óptimo
+            const fontSize = ajustarFuenteSegunLongitud(texto);
+            const minHeight = ajustarAlturaMinima(texto);
+            
+            // Formatear contenido con el tamaño adecuado
+            const lineas = contenidoLimpio.split(/(?<=\.)\s+/).filter(linea => linea.trim());
+            let html = '';
+            
+            lineas.forEach(linea => {
+                const esLista = linea.match(/^\d+[-).]/) || linea.match(/^[•\-]/);
+                const estiloLinea = esLista 
+                    ? `margin: 0 0 1mm ${tipoContenido === 'estrategias' ? '3mm' : '1mm'}; padding-left: 1mm;`
+                    : `margin: 0 0 1mm 0; text-indent: 2mm;`;
                 
-                function formatearContenidoComoHTML(texto) {
-                    const contenidoLimpio = limpiarContenidoParaPDF(texto);
-                    
-                    // Dividir por líneas y crear párrafos
-                    const lineas = contenidoLimpio.split('. ').filter(linea => linea.trim());
-                    
-                    if (lineas.length === 0) {
-                        return '<div style="color: #666; font-style: italic;">No especificado</div>';
-                    }
-                    
-                    // Crear párrafos simples
-                    return lineas.map(linea => 
-                        `<div style="margin-bottom: 4px; line-height: 1.3;">${linea}.</div>`
-                    ).join('');
-                }
-                
-                // ===== GENERAR HTML PERFECTO PARA PDF =====
-                let contenidoHTML = `<!DOCTYPE html>
+                html += `
+                    <div style="
+                        ${estiloLinea}
+                        line-height: 1.35;
+                        font-size: ${fontSize};
+                        text-align: ${tipoContenido === 'estrategias' ? 'justify' : 'left'};
+                        hyphens: auto;
+                        word-wrap: break-word;
+                    ">
+                        ${linea.trim()}
+                    </div>
+                `;
+            });
+            
+            return {
+                html: html,
+                fontSize: fontSize,
+                minHeight: minHeight
+            };
+        }
+        
+        // ===== GENERAR HTML PERFECTO PARA PDF =====
+        let contenidoHTML = `<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>${nombreArchivo}</title>
     <style>
-        /* ESTILOS DEFINITIVOS - PARA IMPRESIÓN */
-        @page {
-            size: A4 landscape;
-            margin: 15mm;
-        }
-        
+        /* ESTILOS DEFINITIVOS - PARA IMPRESIÓN */   
         * {
             margin: 0;
             padding: 0;
@@ -2770,6 +2855,7 @@
         /* SECCIONES */
         .seccion {
             margin-bottom: 6mm;
+            page-break-inside: avoid;
         }
         
         .titulo-seccion {
@@ -2867,11 +2953,18 @@
             line-height: 1.3;
         }
         
-        /* CONTROL DE IMPRESIÓN */
+        /* CONTROL DE IMPRESIÓN MEJORADO */
         @media print {
+            @page {
+                size: A4 landscape;
+                margin: 15mm;
+            }
+            
             body {
                 margin: 0 !important;
                 padding: 15mm !important;
+                orphans: 3;
+                widows: 3;
             }
             
             .pagina {
@@ -2882,14 +2975,28 @@
                 display: none !important;
             }
             
-            .tabla {
-                page-break-inside: avoid !important;
-            }
-            
-            .titulo-seccion, .encabezado-semana, .tabla th {
+            .titulo-seccion, .encabezado-semana-mejorado, .tabla th {
                 background-color: #45258F !important;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+                page-break-after: avoid;
+            }
+            
+            /* MEJOR CONTROL DE DIVISIÓN DE CONTENIDO */
+            .contenido-adaptable {
+                page-break-inside: auto !important;
+                break-inside: auto !important;
+            }
+            
+            /* Evitar que los encabezados queden solos */
+            .encabezado-contenido {
+                page-break-after: avoid;
+            }
+            
+            /* Mejor legibilidad para texto pequeño */
+            .texto-ajustado {
+                -webkit-font-smoothing: antialiased;
+                text-rendering: optimizeLegibility;
             }
         }
         
@@ -2917,34 +3024,173 @@
             gap: 3mm;
             margin: 3mm 0;
         }
+        
+        /* NUEVOS ESTILOS PARA DISEÑO MEJORADO */
+        .grid-2-columnas {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6mm;
+            margin: 4mm 0;
+            align-items: stretch;
+        }
+        
+        .columna-areas {
+            border: 0.75pt solid #45258F;
+            border-radius: 3mm;
+            padding: 4mm;
+            background: #f8f9fa;
+        }
+        
+        .columna-rda {
+            border: 0.75pt solid #6c47c9;
+            border-radius: 3mm;
+            padding: 4mm;
+            background: #f0ebf9;
+        }
+        
+        .titulo-columna {
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 4mm;
+            padding-bottom: 2mm;
+            border-bottom: 1pt solid;
+            font-size: 11pt;
+        }
+        
+        .item-area {
+            padding: 3mm;
+            background: white;
+            border-radius: 2mm;
+            border-left: 3pt solid #45258F;
+            font-weight: 500;
+            font-size: 10pt;
+            margin-bottom: 2mm;
+            box-shadow: 0 1pt 3pt rgba(0,0,0,0.1);
+        }
+        
+        .item-rda {
+            padding: 3mm;
+            background: white;
+            border-radius: 2mm;
+            border-left: 3pt solid #6c47c9;
+            margin-bottom: 3mm;
+            box-shadow: 0 1pt 3pt rgba(0,0,0,0.1);
+        }
+        
+        .ejes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4mm;
+            margin: 3mm 0;
+        }
+        
+        .eje-item {
+            border: 0.75pt solid #cccccc;
+            border-radius: 3mm;
+            padding: 4mm;
+            text-align: center;
+            background: white;
+            transition: all 0.3s;
+        }
+        
+        .eje-seleccionado {
+            border: 1.5pt solid #45258F;
+            background: #f0ebf9;
+        }
+        
+        .eje-titulo {
+            font-weight: bold;
+            font-size: 11pt;
+            margin-bottom: 2mm;
+        }
+        
+        .eje-descripcion {
+            font-size: 10pt;
+            color: #666;
+            margin-bottom: 3mm;
+            line-height: 1.3;
+        }
+        
+        .eje-marca {
+            font-weight: bold;
+            font-size: 12pt;
+            border-radius: 2mm;
+            padding: 2mm;
+            display: inline-block;
+            min-width: 25mm;
+        }
+        
+        .marca-seleccionada {
+            color: #28a745;
+            border: 1.5pt solid #28a745;
+        }
+        
+        .marca-no-seleccionada {
+            color: #666;
+            border: 1pt solid #666;
+        }
+        
+        /* ESTILOS PARA CONTENIDO ADAPTABLE */
+        .contenido-adaptable {
+            page-break-inside: auto;
+            break-inside: auto;
+        }
+        
+        .encabezado-semana-mejorado {
+            background: linear-gradient(135deg, #45258F, #6c47c9);
+            color: white;
+            font-weight: bold;
+            padding: 2mm 3mm;
+            font-size: 10.5pt;
+            border-radius: 1.5mm 1.5mm 0 0;
+            page-break-after: avoid;
+            box-shadow: 0 1pt 2pt rgba(0,0,0,0.1);
+        }
+        
+        .encabezado-contenido {
+            font-weight: bold;
+            color: #45258F;
+            font-size: 9.5pt;
+            margin-bottom: 1.5mm;
+            padding-bottom: 1mm;
+            border-bottom: 0.5pt solid #f0f0f0;
+            page-break-after: avoid;
+        }
+        
+        .texto-ajustado {
+            text-align: justify;
+            hyphens: auto;
+            word-wrap: break-word;
+            line-height: 1.35;
+        }
     </style>
 </head>
 <body>
     <div class="pagina">
 `;
-                
-                // ENCABEZADO INSTITUCIONAL
-                if (incluirEncabezado) {
-                    contenidoHTML += `
+        
+        // ENCABEZADO INSTITUCIONAL
+        if (incluirEncabezado) {
+            contenidoHTML += `
         <div class="encabezado-institucional">
             <div class="titulo-ministerio">MINISTERIO DE EDUCACIÓN PÚBLICA</div>
             <div class="titulo-gobierno">Gobierno de Costa Rica</div>
         </div>
 `;
-                }
-                
-                // TÍTULO PRINCIPAL
-                contenidoHTML += `
+        }
+        
+        // TÍTULO PRINCIPAL
+        contenidoHTML += `
         <div class="titulo-principal">PLANTILLA DE PLANEAMIENTO DIDÁCTICO</div>
         <div class="subtitulo">
             PROGRAMA NACIONAL DE FORMACIÓN TECNOLÓGICA<br>
             <span style="font-size: 10pt;">Informática educativa</span>
         </div>
 `;
-                
-                // INFORMACIÓN GENERAL
-                if (exportarInformacionGeneral) {
-                    contenidoHTML += `
+        
+        // INFORMACIÓN GENERAL
+        if (exportarInformacionGeneral) {
+            contenidoHTML += `
         <div class="seccion">
             <div class="titulo-seccion">INFORMACIÓN GENERAL</div>
             <table class="tabla">
@@ -2963,54 +3209,192 @@
             </table>
         </div>
 `;
-                }
-                
-                // ÁREAS DE CONOCIMIENTO
-                if (exportarSaberes && areasUnicas.size > 0) {
-                    const ciclo = document.getElementById('ciclo').value;
-                    
-                    contenidoHTML += `
+        }
+        
+        // EJES TRANSVERSALES - CORREGIDO Y COMPLETO
+        if (exportarInformacionGeneral) {
+            const ejesSeleccionados = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value);
+            
+            contenidoHTML += `
         <div class="seccion">
-            <div class="titulo-seccion">ÁREAS DE CONOCIMIENTO Y RESULTADOS DE APRENDIZAJE</div>
-`;
-                    
-                    areasUnicas.forEach((area, index) => {
-                        const rda = RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][area] 
-                            ? RDA_POR_CICLO[ciclo][area] 
-                            : 'No definido';
-                        
-                        contenidoHTML += `
-            <div class="tarjeta">
-                <div class="tarjeta-titulo">${area}</div>
-                <div class="tarjeta-contenido"><strong>RdA:</strong> ${rda}</div>
+            <div class="titulo-seccion">EJES TRANSVERSALES DEL PNFT SEGÚN COMPETENCIA MEP</div>
+            
+            <div style="text-align: center; font-size: 10pt; color: #666; margin-bottom: 4mm; font-style: italic;">
+                Marque con una equis (x) el eje a desarrollar
             </div>
-`;
-                    });
+            
+            <div class="ejes-grid">
+                <!-- CIUDADANÍA -->
+                <div class="eje-item ${ejesSeleccionados.includes('ciudadania') ? 'eje-seleccionado' : ''}">
+                    <div class="eje-titulo" style="color: ${ejesSeleccionados.includes('ciudadania') ? '#45258F' : '#333'}">
+                        Ciudadanía y ética digital
+                    </div>
                     
-                    contenidoHTML += `</div>`;
-                }
+                    <div class="eje-descripcion">
+                        Competencias para la ciudadanía responsable y solidaria
+                    </div>
+                    
+                    <div class="eje-marca ${ejesSeleccionados.includes('ciudadania') ? 'marca-seleccionada' : 'marca-no-seleccionada'}">
+                        ${ejesSeleccionados.includes('ciudadania') ? '[X] SELECCIONADO' : '[   ]'}
+                    </div>
+                </div>
                 
-                // SABERES GLOBALES
-                if (exportarSaberesGlobales) {
+                <!-- PENSAMIENTO COMPUTACIONAL -->
+                <div class="eje-item ${ejesSeleccionados.includes('pensamiento') ? 'eje-seleccionado' : ''}">
+                    <div class="eje-titulo" style="color: ${ejesSeleccionados.includes('pensamiento') ? '#45258F' : '#333'}">
+                        Pensamiento computacional
+                    </div>
+                    
+                    <div class="eje-descripcion">
+                        Competencias para la vida y resolución de problemas
+                    </div>
+                    
+                    <div class="eje-marca ${ejesSeleccionados.includes('pensamiento') ? 'marca-seleccionada' : 'marca-no-seleccionada'}">
+                        ${ejesSeleccionados.includes('pensamiento') ? '[X] SELECCIONADO' : '[   ]'}
+                    </div>
+                </div>
+                
+                <!-- EMPRENDIMIENTO -->
+                <div class="eje-item ${ejesSeleccionados.includes('emprendimiento') ? 'eje-seleccionado' : ''}">
+                    <div class="eje-titulo" style="color: ${ejesSeleccionados.includes('emprendimiento') ? '#45258F' : '#333'}">
+                        Emprendimiento e Innovación
+                    </div>
+                    
+                    <div class="eje-descripcion">
+                        Competencias para el empleo digno
+                    </div>
+                    
+                    <div class="eje-marca ${ejesSeleccionados.includes('emprendimiento') ? 'marca-seleccionada' : 'marca-no-seleccionada'}">
+                        ${ejesSeleccionados.includes('emprendimiento') ? '[X] SELECCIONADO' : '[   ]'}
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; font-size: 9pt; color: #999; margin-top: 3mm; font-style: italic;">
+                Nota: Se marca con X el eje transversal seleccionado para desarrollar según competencia MEP
+            </div>
+        </div>
+    `;
+        }
+        
+        // ÁREAS DE CONOCIMIENTO Y RDA EN DOS COLUMNAS - VERSIÓN MEJORADA
+        if (exportarSaberes && areasUnicas.size > 0) {
+            const ciclo = document.getElementById('ciclo').value;
+            
+            contenidoHTML += `
+        <div class="seccion">
+            <div class="titulo-seccion">ÁREAS DE CONOCIMIENTO Y RESULTADOS DE APRENDIZAJE (RDA)</div>
+            
+            <!-- CONTENEDOR DE DOS COLUMNAS PARALELAS -->
+            <div class="grid-2-columnas">
+                
+                <!-- COLUMNA IZQUIERDA: ÁREAS DE CONOCIMIENTO -->
+                <div class="columna-areas">
+                    <div class="titulo-columna" style="color: #45258F; border-bottom-color: #45258F;">
+                        ÁREAS DE CONOCIMIENTO
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 2mm;">
+            `;
+            
+            // Lista completa de áreas (para mostrar todas con su estado)
+            const todasLasAreas = [
+                "Apropiación tecnológica y Digital",
+                "Programación y Algoritmos", 
+                "Computación física y Robótica",
+                "Ciencia de datos e Inteligencia artificial"
+            ];
+            
+            todasLasAreas.forEach(area => {
+                const estaSeleccionada = areasUnicas.has(area);
+                
+                contenidoHTML += `
+                        <div class="item-area" style="border-left-color: ${estaSeleccionada ? '#45258F' : '#cccccc'}; background: ${estaSeleccionada ? '#f0ebf9' : 'white'}">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-weight: ${estaSeleccionada ? 'bold' : 'normal'}; color: ${estaSeleccionada ? '#45258F' : '#333'}">
+                                    ${area}
+                                </span>
+                                <span style="font-weight: bold; font-size: 11pt; color: ${estaSeleccionada ? '#28a745' : '#ccc'}">
+                                    ${estaSeleccionada ? '[✓]' : '[  ]'}
+                                </span>
+                            </div>
+                        </div>
+                `;
+            });
+            
+            contenidoHTML += `
+                    </div>
+                </div>
+                
+                <!-- COLUMNA DERECHA: RESULTADOS DE APRENDIZAJE (RDA) -->
+                <div class="columna-rda">
+                    <div class="titulo-columna" style="color: #6c47c9; border-bottom-color: #6c47c9;">
+                        RESULTADOS DE APRENDIZAJE (RDA)
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 3mm;">
+            `;
+            
+            // Mostrar RdA solo para áreas seleccionadas
+            if (areasUnicas.size > 0) {
+                areasUnicas.forEach(area => {
+                    const rda = RDA_POR_CICLO[ciclo] && RDA_POR_CICLO[ciclo][area] 
+                        ? RDA_POR_CICLO[ciclo][area] 
+                        : 'No definido para este ciclo/nivel';
+                    
                     contenidoHTML += `
+                        <div class="item-rda">
+                            <div style="font-weight: 600; color: #333; margin-bottom: 1.5mm; font-size: 10pt;">
+                                ${area}:
+                            </div>
+                            <div style="font-size: 9.5pt; line-height: 1.4; color: #555;">
+                                ${rda}
+                            </div>
+                        </div>
+                    `;
+                });
+            } else {
+                contenidoHTML += `
+                    <div style="padding: 4mm; text-align: center; color: #999; font-style: italic; font-size: 10pt;">
+                        Seleccione áreas de conocimiento para ver los Resultados de Aprendizaje
+                    </div>
+                `;
+            }
+            
+            contenidoHTML += `
+                    </div>
+                </div>
+            </div> <!-- Fin del grid de 2 columnas -->
+            
+            <div style="text-align: center; font-size: 9pt; color: #666; margin-top: 3mm; font-style: italic;">
+                Nota: Cada Área de Conocimiento tiene su correspondiente Resultado de Aprendizaje (RdA) según el ciclo seleccionado
+            </div>
+        </div>
+    `;
+        }
+        
+        // SABERES GLOBALES - CORREGIDO
+        if (exportarSaberesGlobales) {
+            contenidoHTML += `
         <div class="seccion">
             <div class="titulo-seccion">SABERES GLOBALES</div>
+            
             <div class="grid-3">
                 <!-- CONCEPTUALES -->
                 <div class="tarjeta">
                     <div class="tarjeta-titulo">Saberes Conceptuales (Saber)</div>
                     <div class="tarjeta-contenido">
-`;
-                    
-                    if (saberesSeleccionados.size > 0) {
-                        contenidoHTML += Array.from(saberesSeleccionados).map(saber => 
-                            `• ${saber}<br>`
-                        ).join('');
-                    } else {
-                        contenidoHTML += 'No se han seleccionado saberes conceptuales';
-                    }
-                    
-                    contenidoHTML += `
+            `;
+            
+            if (saberesSeleccionados.size > 0) {
+                contenidoHTML += Array.from(saberesSeleccionados).map(saber => 
+                    `<div style="margin-bottom: 1mm; padding-left: 2mm; border-left: 2pt solid #45258F;">• ${saber}</div>`
+                ).join('');
+            } else {
+                contenidoHTML += '<div style="color: #999; font-style: italic;">No se han seleccionado saberes conceptuales</div>';
+            }
+            
+            contenidoHTML += `
                     </div>
                 </div>
                 
@@ -3018,33 +3402,33 @@
                 <div class="tarjeta">
                     <div class="tarjeta-titulo">Saberes Procedimentales (Saber Hacer)</div>
                     <div class="tarjeta-contenido">
-`;
-                    
-                    if (saberesProcedimentalesGlobales.size > 0) {
-                        const procMap = {
-                            'reconoce': 'Reconoce patrones',
-                            'abstrae': 'Abstrae',
-                            'generaliza': 'Generaliza',
-                            'transfiere': 'Transfiere',
-                            'modulariza': 'Modulariza',
-                            'formula': 'Formula algoritmos',
-                            'remezcla': 'Remezcla',
-                            'depura': 'Depura',
-                            'programa': 'Programa',
-                            'comunica': 'Comunica',
-                            'colabora': 'Colabora',
-                            'piensa': 'Piensa creativamente',
-                            'maneja': 'Maneja tecnologías éticamente'
-                        };
-                        
-                        contenidoHTML += Array.from(saberesProcedimentalesGlobales).map(proc => 
-                            `• ${procMap[proc] || proc}<br>`
-                        ).join('');
-                    } else {
-                        contenidoHTML += 'No se han seleccionado saberes procedimentales';
-                    }
-                    
-                    contenidoHTML += `
+            `;
+            
+            if (saberesProcedimentalesGlobales.size > 0) {
+                const procMap = {
+                    'reconoce': 'Reconoce patrones',
+                    'abstrae': 'Abstrae',
+                    'generaliza': 'Generaliza',
+                    'transfiere': 'Transfiere',
+                    'modulariza': 'Modulariza',
+                    'formula': 'Formula algoritmos',
+                    'remezcla': 'Remezcla',
+                    'depura': 'Depura',
+                    'programa': 'Programa',
+                    'comunica': 'Comunica',
+                    'colabora': 'Colabora',
+                    'piensa': 'Piensa creativamente',
+                    'maneja': 'Maneja tecnologías éticamente'
+                };
+                
+                contenidoHTML += Array.from(saberesProcedimentalesGlobales).map(proc => 
+                    `<div style="margin-bottom: 1mm; padding-left: 2mm; border-left: 2pt solid #6c47c9;">• ${procMap[proc] || proc}</div>`
+                ).join('');
+            } else {
+                contenidoHTML += '<div style="color: #999; font-style: italic;">No se han seleccionado saberes procedimentales</div>';
+            }
+            
+            contenidoHTML += `
                     </div>
                 </div>
                 
@@ -3052,80 +3436,179 @@
                 <div class="tarjeta">
                     <div class="tarjeta-titulo">Saberes Actitudinales (Saber Ser)</div>
                     <div class="tarjeta-contenido">
-`;
-                    
-                    if (saberesActitudinalesGlobales.size > 0) {
-                        const actMap = {
-                            'gusto': 'Gusto por la precisión',
-                            'aprender': 'Aprender del error',
-                            'flexibilidad': 'Flexibilidad',
-                            'tolerancia': 'Tolerancia a la frustración'
-                        };
-                        
-                        contenidoHTML += Array.from(saberesActitudinalesGlobales).map(act => 
-                            `• ${actMap[act] || act}<br>`
-                        ).join('');
-                    } else {
-                        contenidoHTML += 'No se han seleccionado saberes actitudinales';
-                    }
-                    
-                    contenidoHTML += `
+            `;
+            
+            if (saberesActitudinalesGlobales.size > 0) {
+                const actMap = {
+                    'gusto': 'Gusto por la precisión',
+                    'aprender': 'Aprender del error',
+                    'flexibilidad': 'Flexibilidad',
+                    'tolerancia': 'Tolerancia a la frustración'
+                };
+                
+                contenidoHTML += Array.from(saberesActitudinalesGlobales).map(act => 
+                    `<div style="margin-bottom: 1mm; padding-left: 2mm; border-left: 2pt solid #28a745;">• ${actMap[act] || act}</div>`
+                ).join('');
+            } else {
+                contenidoHTML += '<div style="color: #999; font-style: italic;">No se han seleccionado saberes actitudinales</div>';
+            }
+            
+            contenidoHTML += `
                     </div>
                 </div>
-            </div>
+            </div> <!-- Fin del grid-3 -->
         </div>
-`;
-                }
-                
-                // TRANSICIÓN - SIN ESPACIOS
-                contenidoHTML += `
+    `;
+        }
+        
+        // TRANSICIÓN
+        contenidoHTML += `
         <div class="linea-transicion"></div>
         <div class="texto-transicion">Continuación: Aplicación de saberes en la planificación semanal</div>
 `;
+        
+        // ✅ PLANIFICACIÓN POR SEMANAS - VERSIÓN MEJORADA CON AJUSTE AUTOMÁTICO
+        if (exportarSemanas && semanas.length > 0) {
+            contenidoHTML += `
+        <div class="seccion" style="page-break-inside: avoid;">
+            <div class="titulo-seccion" style="page-break-after: avoid;">PLANIFICACIÓN POR SEMANAS</div>
+    `;
+            
+            semanas.forEach((semana, index) => {
+                // ✅ Obtener contenido formateado con ajuste automático
+                const contenidoIndicadores = formatearContenidoConAjuste(semana.indicadores, 'indicadores');
+                const contenidoEstrategias = formatearContenidoConAjuste(semana.actividades, 'estrategias');
+                const contenidoEvaluacion = formatearContenidoConAjuste(semana.evaluacion, 'evaluacion');
                 
-                // PLANIFICACIÓN POR SEMANAS
-                if (exportarSemanas && semanas.length > 0) {
-                    contenidoHTML += `
-        <div class="seccion">
-            <div class="titulo-seccion">PLANIFICACIÓN POR SEMANAS</div>
-`;
+                contenidoHTML += `
+            <!-- SEMANA ${index + 1} - CON AJUSTE DINÁMICO -->
+            <div class="contenido-adaptable" style="margin-bottom: ${index < semanas.length - 1 ? '6mm' : '0'};">
+            
+                <!-- TÍTULO DE SEMANA - NO SE SEPARA DEL CONTENIDO -->
+                <div class="encabezado-semana-mejorado" style="page-break-after: avoid;">
+                    <span style="font-size: 11pt;">📅</span> ${semana.nombre} - ${semana.lecciones}
+                </div>
+                
+                <!-- CONTENIDO: Se divide inteligentemente si es necesario -->
+                <div style="
+                    display: flex;
+                    border: 0.5pt solid #ddd;
+                    border-top: none;
+                    border-radius: 0 0 1.5mm 1.5mm;
+                    overflow: hidden;
+                    min-height: ${Math.max(
+                        contenidoIndicadores.minHeight,
+                        contenidoEstrategias.minHeight,
+                        contenidoEvaluacion.minHeight
+                    )};
+                ">
+                
+                    <!-- COLUMNA 1: INDICADORES DE LOGRO -->
+                    <div style="
+                        flex: 1;
+                        border-right: 0.5pt solid #eee;
+                        padding: 2.5mm;
+                        display: flex;
+                        flex-direction: column;
+                    ">
+                        <div class="encabezado-contenido">
+                            Indicadores de logro
+                        </div>
+                        <div style="
+                            flex-grow: 1;
+                            overflow: hidden;
+                        " class="texto-ajustado">
+                            ${contenidoIndicadores.html}
+                        </div>
+                        <div style="
+                            font-size: 7pt;
+                            color: #999;
+                            text-align: right;
+                            margin-top: 1mm;
+                            font-style: italic;
+                        ">
+                            Tamaño: ${contenidoIndicadores.fontSize}
+                        </div>
+                    </div>
                     
-                    semanas.forEach((semana, index) => {
-                        contenidoHTML += `
-            <div class="margen-abajo">
-                <table class="tabla">
-                    <tr>
-                        <td colspan="3" class="encabezado-semana">
-                            ${semana.nombre} - ${semana.lecciones}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="columna-33">Indicadores de logro</th>
-                        <th class="columna-33">Estrategias de Mediación</th>
-                        <th class="columna-33">Indicadores de evaluación</th>
-                    </tr>
-                    <tr>
-                        <td class="contenido-celda">
-                            ${formatearContenidoComoHTML(semana.indicadores)}
-                        </td>
-                        <td class="contenido-celda">
-                            ${formatearContenidoComoHTML(semana.actividades)}
-                        </td>
-                        <td class="contenido-celda">
-                            ${formatearContenidoComoHTML(semana.evaluacion)}
-                        </td>
-                    </tr>
-                </table>
+                    <!-- COLUMNA 2: ESTRATEGIAS DE MEDIACIÓN -->
+                    <div style="
+                        flex: 1;
+                        border-right: 0.5pt solid #eee;
+                        padding: 2.5mm;
+                        display: flex;
+                        flex-direction: column;
+                    ">
+                        <div class="encabezado-contenido">
+                            Estrategias de Mediación
+                        </div>
+                        <div style="
+                            flex-grow: 1;
+                            overflow: hidden;
+                        " class="texto-ajustado">
+                            ${contenidoEstrategias.html}
+                        </div>
+                        <div style="
+                            font-size: 7pt;
+                            color: #999;
+                            text-align: right;
+                            margin-top: 1mm;
+                            font-style: italic;
+                        ">
+                            Tamaño: ${contenidoEstrategias.fontSize}
+                        </div>
+                    </div>
+                    
+                    <!-- COLUMNA 3: INDICADORES DE EVALUACIÓN -->
+                    <div style="
+                        flex: 1;
+                        padding: 2.5mm;
+                        display: flex;
+                        flex-direction: column;
+                    ">
+                        <div class="encabezado-contenido">
+                            Indicadores de evaluación
+                        </div>
+                        <div style="
+                            flex-grow: 1;
+                            overflow: hidden;
+                        " class="texto-ajustado">
+                            ${contenidoEvaluacion.html}
+                        </div>
+                        <div style="
+                            font-size: 7pt;
+                            color: #999;
+                            text-align: right;
+                            margin-top: 1mm;
+                            font-style: italic;
+                        ">
+                            Tamaño: ${contenidoEvaluacion.fontSize}
+                        </div>
+                    </div>
+                    
+                </div>
+                
             </div>
-`;
-                    });
-                    
-                    contenidoHTML += `</div>`;
-                }
-                
-                // REFLEXIONES
-                if (exportarReflexiones) {
-                    contenidoHTML += `
+            
+            <!-- LÍNEA DIVISORIA (solo entre semanas) -->
+            ${index < semanas.length - 1 ? `
+                <div style="
+                    height: 0.5pt;
+                    background: linear-gradient(to right, transparent, #6c47c9, transparent);
+                    margin: 3mm 0;
+                "></div>
+            ` : ''}
+        `;
+            });
+            
+            contenidoHTML += `
+        </div>
+    `;
+        }
+        
+        // REFLEXIONES
+        if (exportarReflexiones) {
+            contenidoHTML += `
         <div class="seccion">
             <div class="titulo-seccion">REFLEXIONES DOCENTES</div>
             <div class="grid-3">
@@ -3161,10 +3644,10 @@
             </div>
         </div>
 `;
-                }
-                
-                // NOTA IA
-                contenidoHTML += `
+        }
+        
+        // NOTA IA
+        contenidoHTML += `
         <div class="tarjeta" style="background-color: #e8f4fd; border-color: #bbdefb;">
             <div class="tarjeta-titulo" style="color: #0d47a1;">Nota importante sobre el uso de IA</div>
             <div class="tarjeta-contenido">
@@ -3174,10 +3657,10 @@
             </div>
         </div>
 `;
-                
-                // PIE DE PÁGINA
-                if (incluirPiePagina) {
-                    contenidoHTML += `
+        
+        // PIE DE PÁGINA
+        if (incluirPiePagina) {
+            contenidoHTML += `
         <div class="texto-centrado" style="margin-top: 8mm; padding-top: 4mm; border-top: 1pt solid #45258F;">
             <div style="font-weight: bold; color: #45258F; margin-bottom: 2mm; font-size: 11pt;">
                 DIDI - Departamento de Investigación, Desarrollo e Implementación
@@ -3190,108 +3673,118 @@
             </div>
         </div>
 `;
-                }
-                
-                
-                // ===== MÉTODO DEFINITIVO PARA GENERAR PDF =====
-                // En lugar de window.print(), vamos a usar jsPDF para control total
-                
-                try {
-                    // Primero, crear una ventana para vista previa
-                    const ventanaPreview = window.open('', '_blank');
-                    if (!ventanaPreview) {
-                        // Si no se puede abrir ventana, ofrecer descarga directa
-                        const blob = new Blob([contenidoHTML], {type: 'text/html'});
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = url;
-                        a.download = `${nombreArchivo}.html`;
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(url);
-                        
-                        alert('Se ha descargado un archivo HTML. Ábrelo en tu navegador y usa Ctrl+P para imprimir.');
-                        return;
-                    }
-                    
-                    ventanaPreview.document.write(contenidoHTML);
-                    ventanaPreview.document.close();
-                    
-                    // Esperar a que todo cargue
-                    setTimeout(() => {
-                        ventanaPreview.focus();
-                        
-                        // Mostrar instrucciones claras
-                        ventanaPreview.document.body.innerHTML += `
-                            <div class="no-imprimir" style="position: fixed; top: 10px; right: 10px; background: #45258F; color: white; padding: 10px; border-radius: 5px; z-index: 10000;">
-                                <strong>Instrucciones para imprimir:</strong><br>
-                                1. Presione Ctrl+P (ventana impresión)<br>
-                                2. Seleccione "Guardar como PDF"<br>
-                                3. Ajuste márgenes si es necesario<br>
-                                4. Guarde el archivo
-                            </div>
-                        `;
-                        
-                        // También ofrecer botón de impresión
-                        const printButton = ventanaPreview.document.createElement('button');
-                        printButton.innerHTML = '🖨️ Imprimir Ahora';
-                        printButton.classList.add("no-imprimir");
-                        printButton.style.cssText = `
-                            position: fixed;
-                            top: auto;
-                            bottom: 20px;
-                            right: 10px;
-                            background: #28a745;
-                            color: white;
-                            border: none;
-                            padding: 10px 15px;
-                            border-radius: 5px;
-                            cursor: pointer;
-                            font-weight: bold;
-                            z-index: 10000;
-                        `;
-                        printButton.onclick = () => ventanaPreview.print();
-                        ventanaPreview.document.body.appendChild(printButton);
-                        
-                    }, 1000);
-                    
-                } catch (error) {
-                    console.error('Error al generar PDF:', error);
-                    
-                    // Último recurso: descargar como HTML bien formateado
-                    const blob = new Blob([contenidoHTML], {type: 'text/html'});
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `${nombreArchivo}_para_imprimir.html`;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    
-                    alert('Se ha descargado un archivo HTML listo para imprimir. Ábrelo y usa Ctrl+P.');
-                }
-                
-                // Cerrar modal de exportación
-                cerrarExportModal();
-                
-            } catch (error) {
-                console.error('Error general:', error);
-                alert('Error: ' + error.message + '\n\nSe ha descargado un archivo HTML de respaldo.');
-                
-                // Descarga de emergencia
-                const blob = new Blob([contenidoHTML || '<html><body><h1>Documento de respaldo</h1></body></html>'], {type: 'text/html'});
+        }
+        
+        contenidoHTML += `
+    </div>
+</body>
+</html>`;
+        
+        // ===== MÉTODO DEFINITIVO PARA GENERAR PDF =====
+        try {
+            // Crear ventana para vista previa
+            const ventanaPreview = window.open('', '_blank');
+            if (!ventanaPreview) {
+                const blob = new Blob([contenidoHTML], {type: 'text/html'});
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `${nombreArchivo}_respaldo.html`;
+                a.download = `${nombreArchivo}.html`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
+                
+                alert('Se ha descargado un archivo HTML. Ábrelo en tu navegador y usa Ctrl+P para imprimir.');
+                return;
             }
+            
+            ventanaPreview.document.write(contenidoHTML);
+            ventanaPreview.document.close();
+            
+            setTimeout(() => {
+                ventanaPreview.focus();
+                
+                // Instrucciones optimizadas
+                ventanaPreview.document.body.innerHTML += `
+                    <div class="no-imprimir" style="
+                        position: fixed; 
+                        top: 10px; 
+                        right: 10px; 
+                        background: #45258F; 
+                        color: white; 
+                        padding: 10px; 
+                        border-radius: 5px; 
+                        z-index: 10000;
+                        font-size: 10pt;
+                        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+                        max-width: 300px;
+                    ">
+                        <strong>📋 Instrucciones para imprimir:</strong><br>
+                        1. Presione <strong>Ctrl+P</strong><br>
+                        2. Seleccione <strong>"Guardar como PDF"</strong><br>
+                        3. Ajuste márgenes a <strong>15mm</strong><br>
+                        4. Active <strong>"Fondo gráfico"</strong><br>
+                        5. Guarde el archivo
+                    </div>
+                `;
+                
+                const printButton = ventanaPreview.document.createElement('button');
+                printButton.innerHTML = '🖨️ Imprimir Ahora';
+                printButton.classList.add("no-imprimir");
+                printButton.style.cssText = `
+                    position: fixed;
+                    bottom: 20px;
+                    right: 10px;
+                    background: #28a745;
+                    color: white;
+                    border: none;
+                    padding: 10px 15px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-weight: bold;
+                    z-index: 10000;
+                    font-size: 11pt;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+                `;
+                printButton.onclick = () => ventanaPreview.print();
+                ventanaPreview.document.body.appendChild(printButton);
+                
+            }, 1000);
+            
+        } catch (error) {
+            console.error('Error al generar PDF:', error);
+            
+            const blob = new Blob([contenidoHTML], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${nombreArchivo}_para_imprimir.html`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            alert('Se ha descargado un archivo HTML listo para imprimir. Ábrelo y usa Ctrl+P.');
         }
+        
+        cerrarExportModal();
+        
+    } catch (error) {
+        console.error('Error general:', error);
+        alert('Error: ' + error.message + '\n\nSe ha descargado un archivo HTML de respaldo.');
+        
+        const blob = new Blob(['<html><body><h1>Documento de respaldo</h1></body></html>'], {type: 'text/html'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${nombreArchivo}_respaldo.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+}
 
         // Funciones para Prompt IA
         function generarPromptSemana(numeroSemana) {
