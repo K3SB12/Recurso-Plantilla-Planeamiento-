@@ -5,7 +5,7 @@ Les comparto la **Plantilla de Planeamiento Didáctico del PNFT** que hemos esta
 https://k3sb12.github.io/Recurso-Plantilla-Planeamiento-/
 
 💾 **DESCARGAR VERSIÓN OFFLINE:**
-1. En la herramienta, haz clic en "💾 Guardar" 
+1. En la herramienta, haz clic en el "botón verde con la flecha blanca" a la par de 💾 Guardar. 
 2. Selecciona "💻 Guardar versión offline"
 3. Guarda el archivo .html donde quieras
 4. Ábrelo con cualquier navegador (funciona sin internet)
