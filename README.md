@@ -114,5 +114,5 @@ Esta licencia se basa en:
 
 *"La educación es un derecho, no un privilegio. Compartir conocimiento es construir país."*
 
-**© [AÑO ACTUAL] - [TU NOMBRE O INSTITUCIÓN] - Todos los derechos para la educación.**
+**© [2026] - [Ministerio de Educación Pública- Dirección de Recursos Tecnológicos en Educación] - Todos los derechos para la educación.**
 
