@@ -13,7 +13,7 @@ https://k3sb12.github.io/Recurso-Plantilla-Planeamiento-/
 📱 **CARACTERÍSTICAS:**
 ✅ Planificación por semanas con saberes del PNFT.
 ✅ Generación automática de prompts para IA.
-✅ Exportación a PDF y Word (Por el momento el formato para Word está en construcción, no utilizarlo por favor).
+✅ Exportación a PDF.
 ✅ Guardado y carga de planes.
 ✅ Integra ejes transversales y metodologías activas.
 
