@@ -606,7 +606,7 @@
 
         .export-options {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 12px;
             margin: 15px 0;
         }
@@ -851,33 +851,33 @@
         <div id="detalleABJ" class="metodologia-detalle" style="display: none; background: #f8f9fa; padding: 12px; border-radius: 6px; margin: 8px 0;">
             <h4>Aprendizaje basado en juegos - 7 Fases:</h4>
             <ol>
-                <li>Introducción del juego</li>
-                <li>Establecimiento de reglas</li>
-                <li>Práctica guiada</li>
-                <li>Juego independiente</li>
-                <li>Reflexión sobre el aprendizaje</li>
-                <li>Evaluación formativa</li>
-                <li>Cierre y transferencia</li>
+                <li>Definir el objetivo del juego.</li>
+                <li>Incorporar los contenidos en el juego.</li>
+                <li>Proponer un reto.</li>
+                <li>Establecer normas.</li>
+                <li>Crear un sistema de incentivos.</li>
+                <li>Proporcionar realimentación.</li>
+                <li>Evaluar los resultados.</li>
             </ol>
         </div>
 
         <div id="detalleABR" class="metodologia-detalle" style="display: none; background: #f8f9fa; padding: 12px; border-radius: 6px; margin: 8px 0;">
             <h4>Aprendizaje basado en retos - 3 Fases:</h4>
             <ol>
-                <li>Presentación del reto</li>
-                <li>Investigación y desarrollo</li>
-                <li>Presentación de soluciones</li>
+                <li>Presentación del reto.</li>
+                <li>Investigación y desarrollo.</li>
+                <li>Presentación de soluciones.</li>
             </ol>
         </div>
 
         <div id="detalleAPD" class="metodologia-detalle" style="display: none; background: #f8f9fa; padding: 12px; border-radius: 6px; margin: 8px 0;">
             <h4>Aprendizaje Pensamiento por Diseño - 5 Fases:</h4>
             <ol>
-                <li>Empatizar</li>
-                <li>Definir</li>
-                <li>Idear</li>
-                <li>Prototipar</li>
-                <li>Evaluar</li>
+                <li>Empatizar.</li>
+                <li>Definir.</li>
+                <li>Idear.</li>
+                <li>Prototipar.</li>
+                <li>Evaluar.</li>
             </ol>
         </div>
 
@@ -1015,26 +1015,25 @@
                     </div>
                 </div>
                 
-                <!-- FORMATOS DE EXPORTACIÓN -->
+                <!-- FORMATOS DE EXPORTACIÓN - SOLO PDF -->
                 <div style="margin: 15px 0;">
-                    <h4 style="margin-bottom: 10px;">Seleccione formato:</h4>
+                    <h4 style="margin-bottom: 10px;">Formato de exportación:</h4>
                     <div class="export-options">
-                        <div class="export-option" id="opcionWord" onclick="seleccionarFormato('word', this)">
-                            <div style="font-size: 2em;">📝</div>
-                            <strong>Word Editable</strong>
-                            <small>Para modificar sin internet</small>
-                        </div>
-                        <div class="export-option" id="opcionPDF" onclick="seleccionarFormato('pdf', this)">
+                        <div class="export-option selected" id="opcionPDF" onclick="seleccionarFormato('pdf', this)">
                             <div style="font-size: 2em;">📊</div>
                             <strong>PDF para Imprimir</strong>
-                            <small>Formato final oficial</small>
+                            <small>Click al botón exportar PDF</small>
                         </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 10px; font-size: 12px; color: #666; font-style: italic;">
+                        El recurso se generará como vista previa en una nueva pestaña.
+                        Desde allí podrá imprimirlo como PDF usando las opciones de su navegador.
                     </div>
                 </div>
                 
                 <!-- BOTONES DE ACCIÓN -->
                 <div style="display: flex; gap: 10px; margin-top: 20px;">
-                    <button onclick="confirmarExportacion()" class="btn btn-primary" style="flex: 1; padding: 10px 16px;">🚀 Exportar</button>
+                    <button onclick="confirmarExportacion()" class="btn btn-primary" style="flex: 1; padding: 10px 16px;">🚀 Exportar PDF</button>
                     <button onclick="cerrarExportModal()" class="btn btn-outline" style="flex: 1; padding: 10px 16px;">❌ Cancelar</button>
                 </div>
             </div>
@@ -1332,7 +1331,7 @@
                     },
                     { 
                         nombre: "Variable", 
-                        indicadores: ["Identificar una variable en contextos de la vida cotidiana, observando elementos que cambian en relación con otros (como edad, cantidad, clima o tiempo de actividad)."] 
+                        indicadores: ["Identificar una variable in contextos de la vida cotidiana, observando elementos que cambian en relación con otros (como edad, cantidad, clima o tiempo de actividad)."] 
                     },
                     { 
                         nombre: "Evento", 
@@ -2124,7 +2123,7 @@
         let saberesSeleccionados = new Set();
         let saberesProcedimentalesGlobales = new Set();
         let saberesActitudinalesGlobales = new Set();
-        let formatoExportacion = 'word'; // ← Declaración ÚNICA y correcta
+        let formatoExportacion = 'pdf'; // ← Cambiado a PDF por defecto
 
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
@@ -2311,7 +2310,7 @@
                     <div class="saber-columna">
                         <div class="saber-titulo">Saberes Conceptuales (Saber)</div>
                         <div class="saber-contenido" id="conceptuales-semana-${numero}">
-                            <div style="color: #666; font-style: italic; font-size: 11px;">“Los saberes conceptuales se mostrarán automáticamente según las áreas seleccionadas, junto con aquellos que elijas específicamente para esta semana en el espacio correspondiente.”</div>
+                            <div style="color: #666; font-style: italic; font-size: 11px;">"Los saberes conceptuales se mostrarán automáticamente según las áreas seleccionadas, junto con aquellos que elijas específicamente para esta semana en el espacio correspondiente."</div>
                         </div>
                     </div>
                     <div class="saber-columna">
@@ -3211,18 +3210,18 @@
 
         // Función para mostrar el modal CON INICIALIZACIÓN
         function mostrarOpcionesExportar() {
-            // 1. Inicializar formato a Word por defecto
-            formatoExportacion = 'word';
+            // 1. Inicializar formato a PDF por defecto (ya no hay Word)
+            formatoExportacion = 'pdf';
             
             // 2. Limpiar selecciones visuales
             document.querySelectorAll('.export-option').forEach(opt => {
                 opt.classList.remove('selected');
             });
             
-            // 3. Seleccionar Word visualmente
-            const opcionWord = document.getElementById('opcionWord');
-            if (opcionWord) {
-                opcionWord.classList.add('selected');
+            // 3. Seleccionar PDF visualmente
+            const opcionPDF = document.getElementById('opcionPDF');
+            if (opcionPDF) {
+                opcionPDF.classList.add('selected');
             }
             
             // 4. Mostrar modal
@@ -3255,17 +3254,16 @@
             console.log(`Exportando en formato: ${formatoExportacion}`);
             
             if (!formatoExportacion) {
-                alert('Por favor, seleccione un formato de exportación (Word o PDF)');
-                return;
+                formatoExportacion = 'pdf'; // Por defecto PDF
             }
             
-            if (formatoExportacion === 'word') {
-                exportarAWord();
-            } else if (formatoExportacion === 'pdf') {
+            // Solo permite exportar a PDF
+            if (formatoExportacion === 'pdf') {
                 exportarAPDF();
             } else {
-                alert(`Formato desconocido: ${formatoExportacion}`);
-                return;
+                // Si por algún motivo no es PDF, forzar PDF
+                formatoExportacion = 'pdf';
+                exportarAPDF();
             }
             
             cerrarExportModal();
@@ -5247,13 +5245,13 @@
     
             // ADAPTAR FORMATO SEGÚN METODOLOGÍA
             if (metodologiaSeleccionada.includes('ABJ')) {
-                prompt += `• Fase 1: Introducción del juego (conexión con saberes previos)\n`;
-                prompt += `• Fase 2: Establecimiento de reglas (presentación de objetivos)\n`;
-                prompt += `• Fase 3: Práctica guiada (desarrollo de actividades)\n`;
-                prompt += `• Fase 4: Juego independiente (aplicación autónoma)\n`;
-                prompt += `• Fase 5: Reflexión sobre el aprendizaje (metacognición)\n`;
-                prompt += `• Fase 6: Evaluación formativa (retroalimentación)\n`;
-                prompt += `• Fase 7: Cierre y transferencia (aplicación a otros contextos)\n`;
+                prompt += `• Fase 1: Definir el objetivo del juego (conexión con saberes previos).\n`;
+                prompt += `• Fase 2: Incorporar los contenidos en el juego (Estrategia para la actividad).\n`;
+                prompt += `• Fase 3: Proponer un reto (desarrollo de actividades).\n`;
+                prompt += `• Fase 4: Establecer normas (Que debemos respetar y cúal es nuestra guía).\n`;
+                prompt += `• Fase 5: Crear un sistema de incentivos (Motivación,reconocimiento).\n`;
+                prompt += `• Fase 6: Proporcionar realimentación (retroalimentación).\n`;
+                prompt += `• Fase 7: Evaluar los resultados (autoevaluación y coevaluación).\n`;
             } else if (metodologiaSeleccionada.includes('ABR')) {
                 prompt += `• Fase 1: Presentación del reto (contextualización)\n`;
                 prompt += `• Fase 2: Investigación y desarrollo (construcción de soluciones)\n`;
