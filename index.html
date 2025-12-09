@@ -3050,23 +3050,54 @@
         }
 
         function abrirPlan() {
+            console.log("🚨 USANDO VERSIÓN DE EMERGENCIA");
+            
+            // Método SUPER simple - nada de overlays
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
-            input.onchange = e => {
+            
+            // Agregar al body inmediatamente
+            document.body.appendChild(input);
+            
+            // Función de cambio
+            input.addEventListener('change', function(e) {
                 const file = e.target.files[0];
+                if (!file) {
+                    input.remove();
+                    return;
+                }
+                
+                // Validar que sea JSON
+                if (!file.name.endsWith('.json')) {
+                    alert('Solo archivos .json');
+                    input.remove();
+                    return;
+                }
+                
                 const reader = new FileReader();
-                reader.onload = event => {
+                reader.onload = function(e) {
                     try {
-                        const plan = JSON.parse(event.target.result);
-                        cargarPlan(plan);
-                    } catch (error) {
-                        alert('Error al cargar el archivo: ' + error.message);
+                        const data = JSON.parse(e.target.result);
+                        alert('Archivo válido. Cargando...');
+                        cargarPlan(data);
+                        input.remove();
+                    } catch (err) {
+                        alert('Error en el archivo JSON');
+                        input.remove();
                     }
                 };
                 reader.readAsText(file);
-            };
-            input.click();
+            });
+            
+            // Disparar el selector de archivos
+            setTimeout(() => {
+                input.click();
+                // Limpiar después de 10 segundos
+                setTimeout(() => {
+                    if (input.parentNode) input.remove();
+                }, 10000);
+            }, 50);
         }
 
         // FUNCIÓN guardarPlan() - VERSIÓN MEJORADA
@@ -4301,6 +4332,82 @@
         </div>
     `;
         }
+
+        // METODOLOGÍA ACTIVA - NUEVA SECCIÓN PARA INCLUIR EN PDF
+        if (exportarInformacionGeneral) {
+            const metodologia = document.getElementById('metodologiaActiva').value;
+            let metodologiaTexto = '';
+            let fasesDetalle = '';
+            
+            // Obtener el texto descriptivo de la metodología
+            if (metodologia === 'ABJ') {
+                metodologiaTexto = 'Aprendizaje basado en juegos (ABJ) - 7 fases';
+                fasesDetalle = `
+                    <div style="margin-top: 2mm; padding: 3mm; background: #fff3cd; border: 0.5pt solid #ffc107; border-radius: 2mm;">
+                        <div style="font-weight: bold; color: #856404; margin-bottom: 2mm; font-size: 10pt;">Fases del ABJ:</div>
+                        <ol style="margin: 0; padding-left: 4mm; font-size: 9.5pt; line-height: 1.4;">
+                            <li>Definir el objetivo del juego.</li>
+                            <li>Incorporar los contenidos en el juego.</li>
+                            <li>Proponer un reto.</li>
+                            <li>Establecer normas.</li>
+                            <li>Crear un sistema de incentivos.</li>
+                            <li>Proporcionar realimentación.</li>
+                            <li>Evaluar los resultados.</li>
+                        </ol>
+                    </div>
+                `;
+            } else if (metodologia === 'ABR') {
+                metodologiaTexto = 'Aprendizaje basado en retos (ABR) - 3 fases';
+                fasesDetalle = `
+                    <div style="margin-top: 2mm; padding: 3mm; background: #d4edda; border: 0.5pt solid #28a745; border-radius: 2mm;">
+                        <div style="font-weight: bold; color: #155724; margin-bottom: 2mm; font-size: 10pt;">Fases del ABR:</div>
+                        <ol style="margin: 0; padding-left: 4mm; font-size: 9.5pt; line-height: 1.4;">
+                            <li>Presentación del reto.</li>
+                            <li>Investigación y desarrollo.</li>
+                            <li>Presentación de soluciones.</li>
+                        </ol>
+                    </div>
+                `;
+            } else if (metodologia === 'APD') {
+                metodologiaTexto = 'Aprendizaje Pensamiento por Diseño (APD) - 5 fases';
+                fasesDetalle = `
+                    <div style="margin-top: 2mm; padding: 3mm; background: #d1ecf1; border: 0.5pt solid #17a2b8; border-radius: 2mm;">
+                        <div style="font-weight: bold; color: #0c5460; margin-bottom: 2mm; font-size: 10pt;">Fases del APD:</div>
+                        <ol style="margin: 0; padding-left: 4mm; font-size: 9.5pt; line-height: 1.4;">
+                            <li>Empatizar.</li>
+                            <li>Definir.</li>
+                            <li>Idear.</li>
+                            <li>Prototipar.</li>
+                            <li>Evaluar.</li>
+                        </ol>
+                    </div>
+                `;
+            } else {
+                metodologiaTexto = 'No especificada';
+            }
+            
+            if (metodologia) {
+                contenidoHTML += `
+            <div class="seccion">
+                <div class="titulo-seccion" style="background: linear-gradient(135deg, #6c47c9, #45258F);">
+                    METODOLOGÍA ACTIVA SELECCIONADA
+                </div>
+                
+                <div class="tarjeta" style="background: #f8f9fa; border-color: #6c47c9;">
+                    <div style="text-align: center; font-weight: bold; color: #45258F; font-size: 11pt; margin-bottom: 3mm;">
+                        ${metodologiaTexto}
+                    </div>
+                    
+                    ${metodologia ? fasesDetalle : ''}
+                    
+                    <div style="margin-top: 3mm; padding-top: 2mm; border-top: 0.5pt dashed #ddd; font-size: 9pt; color: #666; text-align: center;">
+                        <strong>Nota:</strong> Las estrategias de mediación deben seguir la estructura de fases de esta metodología.
+                    </div>
+                </div>
+            </div>
+            `;
+            }
+        }
         
         // ÁREAS DE CONOCIMIENTO Y RDA EN DOS COLUMNAS - VERSIÓN MEJORADA
         if (exportarSaberes && areasUnicas.size > 0) {
@@ -4912,10 +5019,11 @@
             prompt += `1. Identifique patrones comunes en todas las semanas.\n`;
             prompt += `2. Sugiera estrategias transversales aplicables que integren el/los eje(s) transversal(es) seleccionado(s).\n`;
             prompt += `3. Aplique la metodología ${metodologiaSeleccionada.split(' - ')[0]} en las propuestas de actividades.\n`;
-            prompt += `4. Recomiende secuenciación y articulación global de saberes conceptuales.\n`;
-            prompt += `5. Proponga evaluación integral del proceso.\n`;
-            prompt += `6. Ofrezca recomendaciones para mejorar la coherencia entre semanas.\n`;
-            prompt += `7. Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
+            prompt += `4. Estrategias de mediación que integren, den secuencialidad y articulación global de los saberes conceptuales.\n`;
+            prompt += `5. Evidenciar al menos dos saberes procedimentales y fortalezcan dos saberes actitudinales, acordes con metodologías activas.\n`;
+            prompt += `6. Proponga evaluación integral del proceso.\n`;
+            prompt += `7. Ofrezca recomendaciones para mejorar la coherencia entre semanas.\n`;
+            prompt += `8. Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
 
             // PARTE NUEVA: ESPECÍFICO PARA INDICADORES DE EVALUACIÓN
             prompt += `📋 ESPECÍFICAMENTE NECESITO: \n`;
@@ -5073,7 +5181,7 @@
             return metodo ? metodologiasMap[metodo] || metodo : 'No especificada';
         }
 
-                // ===== FUNCIÓN PARA MOSTRAR MENSAJES TEMPORALES =====
+        // Función para mostrar mensajes temporales
         function mostrarMensaje(texto, esError = false) {
             // Eliminar mensaje anterior si existe
             const mensajeAnterior = document.querySelector('.mensaje-temporal');
@@ -5085,19 +5193,38 @@
             const mensaje = document.createElement('div');
             mensaje.className = 'mensaje-temporal';
             mensaje.style.background = esError ? 'var(--danger-color)' : 'var(--success-color)';
+            mensaje.style.color = 'white';
+            mensaje.style.padding = '12px 20px';
+            mensaje.style.borderRadius = '6px';
+            mensaje.style.position = 'fixed';
+            mensaje.style.bottom = '20px';
+            mensaje.style.right = '20px';
+            mensaje.style.zIndex = '10000';
+            mensaje.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+            mensaje.style.display = 'flex';
+            mensaje.style.alignItems = 'center';
+            mensaje.style.gap = '10px';
+            mensaje.style.fontSize = '14px';
+            mensaje.style.maxWidth = '400px';
+            mensaje.style.wordWrap = 'break-word';
+            mensaje.style.animation = 'slideIn 0.3s ease';
             
             mensaje.innerHTML = `
-                ${esError ? '❌' : '✅'} ${texto}
+                ${esError ? '❌' : '✅'} 
+                <span>${texto}</span>
             `;
             
             document.body.appendChild(mensaje);
             
-            // Eliminar automáticamente después de 3 segundos
+            // Eliminar automáticamente después de 4 segundos
             setTimeout(() => {
                 if (mensaje.parentNode) {
-                    mensaje.remove();
+                    mensaje.style.animation = 'fadeOut 0.3s ease';
+                    setTimeout(() => {
+                        if (mensaje.parentNode) mensaje.remove();
+                    }, 300);
                 }
-            }, 3000);
+            }, 4000);
         }
 
         function cerrarPromptSemanaModal() {
@@ -5215,8 +5342,8 @@
             prompt += `• Genera 3-4 actividades secuenciadas para ${semana.lecciones} que:\n`;
             prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Por ejemplo Ciudadanía digital'}" en las actividades.\n`;
             prompt += `• Sigan la estructura de fases de ${metodologiaSeleccionada.split(' - ')[0]}.\n`;
-            prompt += `• Se enfoquen en la articulación de los saberes conceptuales específicos de esta semana.\n`;
-            prompt += `• Desarrollen los saberes procedimentales y actitudinales seleccionados.\n`;
+            prompt += `• Estrategias de mediación que integren al menos dos saberes conceptuales.\n`;
+            prompt += `• Evidencien al menos un saber procedimental y fortalezcan un saber actitudinal, acordes con metodologías activas. .\n`;
             prompt += `• Incluyan recursos tecnológicos apropiados.\n`;
             prompt += `• Contengan instrumentos de evaluación formativa alineados con el MEP.\n`;
             prompt += `• Sean prácticas y contextualizadas para ${nivel}.\n`;
