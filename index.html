@@ -724,6 +724,20 @@
             box-sizing: border-box;
         }
 
+        /* Nuevos estilos para metodología personalizada */
+        .metodologia-personalizada-container {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .metodologia-personalizada-container.visible {
+            display: block;
+        }
+
     </style>
 </head>
 <body>
@@ -826,60 +840,35 @@
                 <label>
                     <input type="checkbox" name="eje" value="pensamiento">
                     <span><strong>Pensamiento computacional</strong><br>
-                    <small>Competencias para la vida</small></span>
+                    <small>Competencias para la vida: Sociales, emocionales y de aprendizaje </small></span>
                 </label>
             </div>
             <div class="eje-option">
                 <label>
                     <input type="checkbox" name="eje" value="emprendimiento">
                     <span><strong>Emprendimiento e Innovación</strong><br>
-                    <small>Competencias para el empleo digno</small></span>
+                    <small>Competencias para el empleo digno y emprendimiento</small></span>
                 </label>
             </div>
         </div>
 
-        <!-- METODOLOGÍA ACTIVA -->
+        <!-- METODOLOGÍA ACTIVA - MODIFICADA -->
         <div class="section-title">Metodología activa:</div>
         <select id="metodologiaActiva" class="select-field" onchange="mostrarDetalleMetodologia(this.value)">
             <option value="">Seleccionar metodología</option>
-            <option value="ABJ">Aprendizaje basado en juegos (ABJ) - 7 fases</option>
-            <option value="ABR">Aprendizaje basado en retos (ABR) - 3 fases</option>
-            <option value="APD">Aprendizaje Pensamiento por Diseño (APD) - 5 fases</option>
+            <option value="ABJ">Aprendizaje basado en juegos (ABJ)</option>
+            <option value="ABR">Aprendizaje basado en retos (ABR)</option>
+            <option value="APD">Aprendizaje Pensamiento por Diseño (APD)</option>
+            <option value="otra">Otra metodología</option>
         </select>
 
-        <!-- DETALLES DE METODOLOGÍAS -->
-        <div id="detalleABJ" class="metodologia-detalle" style="display: none; background: #f8f9fa; padding: 12px; border-radius: 6px; margin: 8px 0;">
-            <h4>Aprendizaje basado en juegos - 7 Fases:</h4>
-            <ol>
-                <li>Definir el objetivo del juego.</li>
-                <li>Incorporar los contenidos en el juego.</li>
-                <li>Proponer un reto.</li>
-                <li>Establecer normas.</li>
-                <li>Crear un sistema de incentivos.</li>
-                <li>Proporcionar realimentación.</li>
-                <li>Evaluar los resultados.</li>
-            </ol>
+        <!-- CAMPO PARA METODOLOGÍA PERSONALIZADA -->
+        <div id="metodologiaPersonalizadaContainer" class="metodologia-personalizada-container">
+            <label for="metodologiaPersonalizada"><strong>Especifique la metodología:</strong></label>
+            <input type="text" id="metodologiaPersonalizada" class="input-field" placeholder="Escriba la metodología que desea utilizar...">
         </div>
 
-        <div id="detalleABR" class="metodologia-detalle" style="display: none; background: #f8f9fa; padding: 12px; border-radius: 6px; margin: 8px 0;">
-            <h4>Aprendizaje basado en retos - 3 Fases:</h4>
-            <ol>
-                <li>Comprender(Gran idea).</li>
-                <li>Investigar.</li>
-                <li>Actuar(Solución).</li>
-            </ol>
-        </div>
-
-        <div id="detalleAPD" class="metodologia-detalle" style="display: none; background: #f8f9fa; padding: 12px; border-radius: 6px; margin: 8px 0;">
-            <h4>Aprendizaje Pensamiento por Diseño - 5 Fases:</h4>
-            <ol>
-                <li>Empatizar.</li>
-                <li>Definir.</li>
-                <li>Idear.</li>
-                <li>Prototipar.</li>
-                <li>Evaluar.</li>
-            </ol>
-        </div>
+        <!-- DETALLES DE METODOLOGÍAS - ELIMINADOS -->
 
         <!-- PLANIFICACIÓN POR SEMANAS -->
         <div class="section-title espacio-optimizado">Planificación por Semanas</div>
@@ -915,9 +904,12 @@
             </tr>
         </table>
 
-        <!-- OBSERVACIONES -->
+        <!-- OBSERVACIONES CON NUEVO TEXTO -->
         <div class="section-title">Observaciones y/o recomendaciones didácticas por nivel:</div>
-        <textarea id="observaciones" class="textarea-field" placeholder="Observaciones generales sobre el desarrollo de las clases..." style="height: 80px;"></textarea>
+        <div style="font-size: 11px; color: #666; margin-bottom: 8px; font-style: italic;">
+            En este apartado la persona docente podrá realizar los apuntes que considere necesarios: antes, durante y después de la aplicación del planeamiento didáctico. Por ejemplo: las observaciones sobre los avances en el proceso de recuperación académica, el desarrollo de los saberes disciplinares, las habilidades, las competencias y el contexto, las valoraciones sobre las particularidades del estudiantado, los aprendizajes esperados que quedaron pendientes o se deban retomar, entre otros.
+        </div>
+        <textarea id="observaciones" class="textarea-field" placeholder="Escriba aquí sus observaciones..." style="height: 80px;"></textarea>
 
         <hr style="margin: 15px 0; border: 1px solid #45258F;">
         <p style="font-size: 12px; color: #555; text-align: justify; font-style: italic;">
@@ -962,7 +954,7 @@
                     💾 Guardar archivo (.json)
                 </button>
                 <button class="menu-opcion" onclick="ejecutarGuardarOffline()">
-                    💻 Guardar versión offline
+                    💻 Descargar plantilla offline
                 </button>
             </div>
         </div>    
@@ -1056,7 +1048,7 @@
                     1. Revise el texto completo y luego presione el botón copiar prompt.<br>
                     2. Da click en la IA de preferencia y pegue el texto (Ctrl+V). <br>
                     3. La IA generará estrategias de mediación específicas, las cuales deben ser personalizadas según contexto educativo.<br>
-                    4. Revise y adapte las sugerencias a su contexto.
+                    4. Siéntase en la seguridad de crear su propio prompt, esto es sólo un ejemplo el cual lo puede sobrescribir.
                 </div>
                 
                 <div style="margin: 12px 0;">
@@ -2382,6 +2374,18 @@
 
         function configurarEventListeners() {
             document.getElementById('leccionesPlanificadas').addEventListener('change', actualizarSemanasPreservandoContenido);
+            document.getElementById('metodologiaActiva').addEventListener('change', manejarCambioMetodologia);
+        }
+
+        function manejarCambioMetodologia() {
+            const metodologia = document.getElementById('metodologiaActiva').value;
+            const container = document.getElementById('metodologiaPersonalizadaContainer');
+            
+            if (metodologia === 'otra') {
+                container.classList.add('visible');
+            } else {
+                container.classList.remove('visible');
+            }
         }
 
         function actualizarNiveles() {
@@ -2846,28 +2850,22 @@
                 }
                 
                 // Buscar en Módulo 2
-                if (PNFT_DATA[nivel]["Módulo 2"] && PNFT_DATA[nivel]["Módulo 2"][areaNombre]) {
-                    encontroSaberes = true;
-                    html += `<div style="margin: 10px 0 3px 0; padding-left: 5px; font-size: 10px; font-weight: 600; color: #6c47c9; background: #f5f2ff; padding: 3px 8px; border-radius: 4px; display: inline-block;">MÓDULO 2</div>`;
-                    
-                    PNFT_DATA[nivel]["Módulo 2"][areaNombre].saberes.forEach(saber => {
-                        const estaSeleccionado = semana.saberes.includes(saber.nombre);
-                        
-                        html += `
-                            <div class="saber-conceptual-item ${estaSeleccionado ? 'seleccionado' : ''}">
-                                <input type="checkbox" 
-                                    ${estaSeleccionado ? 'checked' : ''}
-                                    onchange="manejarSeleccionSaber(${numeroSemana}, '${saber.nombre}', this.checked, '${areaNombre}', \`${saber.indicadores.join('|')}\`)">
-                                <div style="flex: 1;">
-                                    <div style="font-weight: 500; font-size: 11px;">
-                                        ${saber.nombre}
-                                        <span style="font-size: 9px; background: #6c47c915; color: #6c47c9; padding: 1px 6px; border-radius: 10px; margin-left: 6px; border: 1px solid #6c47c930; font-weight: 600;">M2</span>
+                if (!encontrado && PNFT_DATA[nivel]["Módulo 2"]) {
+                    for (const moduloArea in PNFT_DATA[nivel]["Módulo 2"]) {
+                        const saberData = PNFT_DATA[nivel]["Módulo 2"][moduloArea].saberes.find(s => s.nombre === saber);
+                        if (saberData) {
+                            encontrado = true;
+                            saberData.indicadores.forEach(indicador => {
+                                html += `
+                                    <div style="margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dotted #ddd; font-size: 11px;">
+                                        • ${indicador} 
+                                        <span style="color: #6c47c9; font-size: 9px; background: #6c47c910; padding: 1px 4px; border-radius: 3px; margin-left: 4px;">[Módulo 2]</span>
                                     </div>
-                                    <div class="indicador-logro">${saber.indicadores[0]}</div>
-                                </div>
-                            </div>
-                        `;
-                    });
+                                `;
+                            });
+                            break;
+                        }
+                    }
                 }
             } else {
                 // Para compatibilidad con versiones anteriores (si las hubiera)
@@ -3278,17 +3276,9 @@
         }
 
         function mostrarDetalleMetodologia(metodologia) {
-            document.querySelectorAll('.metodologia-detalle').forEach(detalle => {
-                detalle.style.display = 'none';
-            });
-            
-            if (metodologia === 'ABJ') {
-                document.getElementById('detalleABJ').style.display = 'block';
-            } else if (metodologia === 'ABR') {
-                document.getElementById('detalleABR').style.display = 'block';
-            } else if (metodologia === 'APD') {
-                document.getElementById('detalleAPD').style.display = 'block';
-            }
+            // Esta función ya no es necesaria ya que eliminamos los detalles
+            // Solo manejamos la visibilidad del campo personalizado
+            manejarCambioMetodologia();
         }
 
         // Funciones para los botones de acción
@@ -3381,6 +3371,12 @@
         }
 
         function obtenerDatosPlan() {
+            // Obtener metodología activa
+            let metodologia = document.getElementById('metodologiaActiva').value;
+            if (metodologia === 'otra') {
+                metodologia = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología (personalizada)';
+            }
+            
             return {
                 informacionGeneral: {
                     cursoLectivo: document.getElementById('cursoLectivo').value,
@@ -3398,7 +3394,7 @@
                     asignatura: document.getElementById('asignatura').value
                 },
                 ejesTransversales: Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value),
-                metodologiaActiva: document.getElementById('metodologiaActiva').value,
+                metodologiaActiva: metodologia,
                 semanas: semanas,
                 reflexiones: {
                     queFunciono: document.getElementById('queFunciono').value,
@@ -3440,8 +3436,19 @@
             }
             
             if (plan.metodologiaActiva) {
-                document.getElementById('metodologiaActiva').value = plan.metodologiaActiva;
-                mostrarDetalleMetodologia(plan.metodologiaActiva);
+                // Manejar metodología personalizada
+                const metodologia = plan.metodologiaActiva;
+                if (metodologia.includes('ABJ') || metodologia.includes('Aprendizaje basado en juegos')) {
+                    document.getElementById('metodologiaActiva').value = 'ABJ';
+                } else if (metodologia.includes('ABR') || metodologia.includes('Aprendizaje basado en retos')) {
+                    document.getElementById('metodologiaActiva').value = 'ABR';
+                } else if (metodologia.includes('APD') || metodologia.includes('Pensamiento por Diseño')) {
+                    document.getElementById('metodologiaActiva').value = 'APD';
+                } else if (metodologia) {
+                    document.getElementById('metodologiaActiva').value = 'otra';
+                    document.getElementById('metodologiaPersonalizada').value = metodologia;
+                    document.getElementById('metodologiaPersonalizadaContainer').classList.add('visible');
+                }
             }
             
             if (plan.semanas && plan.semanas.length > 0) {
@@ -3726,12 +3733,17 @@
             
             // METODOLOGÍA ACTIVA
             if (exportarInformacionGeneral) {
-                const metodologia = document.getElementById('metodologiaActiva').value;
+                let metodologia = document.getElementById('metodologiaActiva').value;
+                if (metodologia === 'otra') {
+                    metodologia = document.getElementById('metodologiaPersonalizada').value || 'Metodología personalizada';
+                }
+                
                 if (metodologia) {
                     let metodologiaTexto = '';
-                    if (metodologia === 'ABJ') metodologiaTexto = 'Aprendizaje basado en juegos (ABJ) - 7 fases';
-                    if (metodologia === 'ABR') metodologiaTexto = 'Aprendizaje basado en retos (ABR) - 3 fases';
-                    if (metodologia === 'APD') metodologiaTexto = 'Aprendizaje Pensamiento por Diseño (APD) - 5 fases';
+                    if (metodologia === 'ABJ') metodologiaTexto = 'Aprendizaje basado en juegos (ABJ)';
+                    else if (metodologia === 'ABR') metodologiaTexto = 'Aprendizaje basado en retos (ABR)';
+                    else if (metodologia === 'APD') metodologiaTexto = 'Aprendizaje Pensamiento por Diseño (APD)';
+                    else metodologiaTexto = metodologia;
                     
                     contenidoHTML += `
                         <div class="section-title">Metodología activa:</div>
@@ -4584,58 +4596,18 @@
 
         // METODOLOGÍA ACTIVA - NUEVA SECCIÓN PARA INCLUIR EN PDF
         if (exportarInformacionGeneral) {
-            const metodologia = document.getElementById('metodologiaActiva').value;
-            let metodologiaTexto = '';
-            let fasesDetalle = '';
-            
-            // Obtener el texto descriptivo de la metodología
-            if (metodologia === 'ABJ') {
-                metodologiaTexto = 'Aprendizaje basado en juegos (ABJ) - 7 fases';
-                fasesDetalle = `
-                    <div style="margin-top: 2mm; padding: 3mm; background: #fff3cd; border: 0.5pt solid #ffc107; border-radius: 2mm;">
-                        <div style="font-weight: bold; color: #856404; margin-bottom: 2mm; font-size: 10pt;">Fases del ABJ:</div>
-                        <ol style="margin: 0; padding-left: 4mm; font-size: 9.5pt; line-height: 1.4;">
-                            <li>Definir el objetivo del juego.</li>
-                            <li>Incorporar los contenidos en el juego.</li>
-                            <li>Proponer un reto.</li>
-                            <li>Establecer normas.</li>
-                            <li>Crear un sistema de incentivos.</li>
-                            <li>Proporcionar realimentación.</li>
-                            <li>Evaluar los resultados.</li>
-                        </ol>
-                    </div>
-                `;
-            } else if (metodologia === 'ABR') {
-                metodologiaTexto = 'Aprendizaje basado en retos (ABR) - 3 fases';
-                fasesDetalle = `
-                    <div style="margin-top: 2mm; padding: 3mm; background: #d4edda; border: 0.5pt solid #28a745; border-radius: 2mm;">
-                        <div style="font-weight: bold; color: #155724; margin-bottom: 2mm; font-size: 10pt;">Fases del ABR:</div>
-                        <ol style="margin: 0; padding-left: 4mm; font-size: 9.5pt; line-height: 1.4;">
-                            <li>Presentación del reto.</li>
-                            <li>Investigación y desarrollo.</li>
-                            <li>Presentación de soluciones.</li>
-                        </ol>
-                    </div>
-                `;
-            } else if (metodologia === 'APD') {
-                metodologiaTexto = 'Aprendizaje Pensamiento por Diseño (APD) - 5 fases';
-                fasesDetalle = `
-                    <div style="margin-top: 2mm; padding: 3mm; background: #d1ecf1; border: 0.5pt solid #17a2b8; border-radius: 2mm;">
-                        <div style="font-weight: bold; color: #0c5460; margin-bottom: 2mm; font-size: 10pt;">Fases del APD:</div>
-                        <ol style="margin: 0; padding-left: 4mm; font-size: 9.5pt; line-height: 1.4;">
-                            <li>Empatizar.</li>
-                            <li>Definir.</li>
-                            <li>Idear.</li>
-                            <li>Prototipar.</li>
-                            <li>Evaluar.</li>
-                        </ol>
-                    </div>
-                `;
-            } else {
-                metodologiaTexto = 'No especificada';
+            let metodologia = document.getElementById('metodologiaActiva').value;
+            if (metodologia === 'otra') {
+                metodologia = document.getElementById('metodologiaPersonalizada').value || 'Metodología personalizada';
             }
             
             if (metodologia) {
+                let metodologiaTexto = '';
+                if (metodologia === 'ABJ') metodologiaTexto = 'Aprendizaje basado en juegos (ABJ)';
+                else if (metodologia === 'ABR') metodologiaTexto = 'Aprendizaje basado en retos (ABR)';
+                else if (metodologia === 'APD') metodologiaTexto = 'Aprendizaje Pensamiento por Diseño (APD)';
+                else metodologiaTexto = metodologia;
+                
                 contenidoHTML += `
             <div class="seccion">
                 <div class="titulo-seccion" style="background: linear-gradient(135deg, #6c47c9, #45258F);">
@@ -4647,10 +4619,8 @@
                         ${metodologiaTexto}
                     </div>
                     
-                    ${metodologia ? fasesDetalle : ''}
-                    
                     <div style="margin-top: 3mm; padding-top: 2mm; border-top: 0.5pt dashed #ddd; font-size: 9pt; color: #666; text-align: center;">
-                        <strong>Nota:</strong> Las estrategias de mediación deben seguir la estructura de fases de esta metodología.
+                        <strong>Nota:</strong> Las estrategias de mediación deben adaptarse a esta metodología seleccionada.
                     </div>
                 </div>
             </div>
@@ -5176,6 +5146,7 @@
     }
 }
 
+        // ✅ FUNCIÓN DEPURADA PARA PROMPT IA GENERAL
         function generarPromptCompleto() {
             const ciclo = document.getElementById('ciclo').value;
             const nivel = document.getElementById('nivel').value;
@@ -5189,7 +5160,7 @@
             const ejesSeleccionados = obtenerEjesTransversales();
             const metodologiaSeleccionada = obtenerMetodologiaActiva();
 
-                // Obtener TODOS los indicadores de logro de todas las semanas
+            // Obtener TODOS los indicadores de logro de todas las semanas
             let todosIndicadoresLogro = [];
             semanas.forEach((semana, index) => {
                 const indicadoresSemana = obtenerIndicadoresLogroSemana(index + 1);
@@ -5199,61 +5170,41 @@
             // Filtrar duplicados
             todosIndicadoresLogro = [...new Set(todosIndicadoresLogro)];
             
-            let prompt = `Como especialista en educación, necesito un resumen general de estrategias de mediación para todo el planeamiento del nivel ${nivel} del ${ciclo}.\n\n`;
-            
-            prompt += `CONTEXTO GENERAL:\n`;
+            let prompt = `CONTEXTO GENERAL:\n`;
             prompt += `• Curso lectivo: ${document.getElementById('cursoLectivo').value}\n`;
             prompt += `• Semestre: ${document.getElementById('semestre').value}\n`;
             prompt += `• Total de lecciones: ${document.getElementById('leccionesPlanificadas').value}\n`;
             prompt += `• Meses: ${document.getElementById('mesInicio').value} a ${document.getElementById('mesFinal').value}\n`;
             prompt += `• Total de semanas: ${semanas.length}\n\n`;
 
-            // ✅ NUEVO: AÑADIR EJES TRANSVERSALES
-            if (ejesSeleccionados.length > 0) {
-                prompt += `• Eje(s) transversal(es): ${ejesSeleccionados.join(', ')}\n`;
-            } else {
-                prompt += `• Eje transversal: No seleccionado\n`;
-            }
-            
-            // ✅ NUEVO: AÑADIR METODOLOGÍA ACTIVA
-            prompt += `• Metodología activa: ${metodologiaSeleccionada}\n`;
-            
-            prompt += `\n`;
-            
+            // EJES Y METODOLOGÍA
+            prompt += `• Eje(s) transversal(es): ${ejesSeleccionados.length > 0 ? ejesSeleccionados.join(', ') : 'No seleccionado'}\n`;
+            prompt += `• Metodología activa: ${metodologiaSeleccionada}\n\n`;
+
+            // RESUMEN POR SEMANAS
             prompt += `RESUMEN POR SEMANAS:\n`;
             semanas.forEach((semana, index) => {
-                const indicadoresSemana = obtenerIndicadoresLogroSemana(index + 1);
-
                 prompt += `SEMANA ${index + 1} (${semana.lecciones}):\n`;
-                prompt += `• Áreas: ${semana.areas.join(', ')}\n`;
-                prompt += `• Saberes conceptuales: ${semana.saberes.length}\n`;
-                prompt += `• Saberes procedimentales: ${semana.procedimentales.length}\n`;
-                prompt += `• Saberes actitudinales: ${semana.actitudinales.length}\n`;
-                prompt += `• Indicadores de logro: ${indicadoresSemana.length}\n`;
-                
-                if (indicadoresSemana.length > 0) {
-                    prompt += `  Ejemplos: ${indicadoresSemana.slice(0, 2).map(i => `"${i}"`).join('; ')}${indicadoresSemana.length > 2 ? '...' : ''}\n`;
-                }
-                prompt += `\n`;
+                prompt += `• Áreas: ${semana.areas.join(', ') || 'No seleccionadas'}\n`;
+                prompt += `• Saberes conceptuales: Globales ya esto lo tiene el programa\n`;
+                prompt += `• Saberes procedimentales: globales ya esto lo tiene el programa\n`;
+                prompt += `• Saberes actitudinales: globales ya esto lo tiene el programa\n`;
+                prompt += `• Indicadores de logro: globales ya esto lo tiene el programa\n`;
             });
+            prompt += `\n`;
 
-             // INDICADORES DE LOGRO GLOBALES
-                if (todosIndicadoresLogro.length > 0) {
-                    prompt += `🎯 INDICADORES DE LOGRO GLOBALES (Todas las semanas): \n`;
-                    prompt += `Total de indicadores únicos: ${todosIndicadoresLogro.length}\n\n`;
-
-            // Mostrar algunos ejemplos (no todos para no hacer muy largo el prompt)
-                const ejemplos = todosIndicadoresLogro.slice(0, 5);
-                ejemplos.forEach((indicador, index) => {
+            // INDICADORES DE LOGRO GLOBALES
+            prompt += `🎯 INDICADORES DE LOGRO GLOBALES (Todas las semanas):\n`;
+            prompt += `Total de indicadores únicos: ${todosIndicadoresLogro.length}\n\n`;
+            
+            if (todosIndicadoresLogro.length > 0) {
+                prompt += `Anotar automáticamente todos los indicadores de logro que el docente eligió en las semanas:\n`;
+                todosIndicadoresLogro.forEach((indicador, index) => {
                     prompt += `${index + 1}. ${indicador}\n`;
                 });
-                
-                if (todosIndicadoresLogro.length > 5) {
-                    prompt += `... y ${todosIndicadoresLogro.length - 5} indicadores más.\n`;
-                }
                 prompt += `\n`;
             }
-            
+
             // SABERES CONCEPTUALES GLOBALES
             prompt += `📚 SABERES CONCEPTUALES GLOBALES (Todas las semanas):\n`;
             if (saberesSeleccionados.size > 0) {
@@ -5265,54 +5216,30 @@
             }
             prompt += `\n`;
 
+            // ENFOQUE PEDAGÓGICO
             prompt += `🎓 ENFOQUE PEDAGÓGICO SELECCIONADO:\n`;
-            if (ejesSeleccionados.length > 0) {
-                prompt += `• Eje(s) transversal(es): ${ejesSeleccionados.join(', ')}\n`;
-                prompt += `• Las estrategias deben integrar este(s) eje(s) transversal(es) en todas las actividades.\n`;
-            }
-            prompt += `• Metodología activa: ${metodologiaSeleccionada}\n`;
-            prompt += `• Las actividades deben seguir la estructura de fases de esta metodología.\n\n`;
-            
-            prompt += `SOLICITO UN RESUMEN GENERAL QUE:\n`;
-            prompt += `1. Identifique patrones comunes en todas las semanas.\n`;
-            prompt += `2. Sugiera estrategias transversales aplicables que integren el/los eje(s) transversal(es) seleccionado(s).\n`;
-            prompt += `3. Aplique la metodología ${metodologiaSeleccionada.split(' - ')[0]} en las propuestas de actividades.\n`;
-            prompt += `4. Estrategias de mediación que integren, den secuencialidad y articulación global de los saberes conceptuales.\n`;
-            prompt += `5. Evidenciar al menos dos saberes procedimentales y fortalezcan dos saberes actitudinales, acordes con metodologías activas.\n`;
-            prompt += `6. Proponga evaluación integral del proceso.\n`;
-            prompt += `7. Ofrezca recomendaciones para mejorar la coherencia entre semanas.\n`;
-            prompt += `8. Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
+            prompt += `• Eje(s) transversal(es): ${ejesSeleccionados.length > 0 ? ejesSeleccionados.join(', ') : 'No seleccionado'}\n`;
+            prompt += `• Las estrategias deben integrar este(s) eje(s) transversal(es) en todas las actividades.\n`;
+            prompt += `• Metodología activa: ${metodologiaSeleccionada || 'Pendiente de anotar'}\n`;
+            prompt += `• Las actividades deben seguir la estructura de fases de esta metodología. ${metodologiaSeleccionada ? 'Se completa automáticamente' : 'Pendiente de anotar'}\n\n`;
 
-            // PARTE NUEVA: ESPECÍFICO PARA INDICADORES DE EVALUACIÓN
-            prompt += `📋 ESPECÍFICAMENTE NECESITO: \n`;
-            prompt += `•Proporciona un banco de indicadores de evaluación para los indicadores de logro listados por el docente.\n`;
-            prompt += `•Organízalos por:\n`;
-            prompt += `• Nivel de complejidad (básico, medio, avanzado).\n`;
-            prompt += `• Tipo de evidencia (producto, desempeño, conocimiento).\n`;
-            prompt += `• Instrumento de evaluación sugerido (rúbrica, lista de cotejo, escala de estimación) según lo indica el MEP en Costa Rica.\n\n`;
+            // SOLICITUD
+            prompt += `SOLICITO UN RESUMEN GENERAL QUE:\n`;
+            prompt += `1. Identifique patrones comunes en todas las semanas mostrando claridad y organización.\n`;
+            prompt += `2. Sugiera estrategias transversales aplicables que integren el/los eje(s) transversal(es) seleccionado(s).\n`;
+            prompt += `3. Aplique la metodología ${metodologiaSeleccionada || 'Pendiente'} en las propuestas de actividades.\n`;
+            prompt += `4. Estrategias de mediación que integren, den secuencialidad coherente y articulación de los saberes conceptuales.\n`;
+            prompt += `5. Evidenciar los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
+            prompt += `6. Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
+
+            // INSTRUMENTO SUGERIDO
+            prompt += `• Instrumento sugerido según el reglamento de evaluación del Mep: \n`;
             
-            prompt += `📝 FORMATO SUGERIDO PARA LOS INDICADORES DE EVALUACIÓN:\n`;
-            prompt += `• Para cada indicador de logro, sugiere 1-2 indicadores de evaluación que sean:\n`;
-            prompt += `• Medibles y observables.\n`;
-            prompt += `• Alineados con el currículo MEP/PNFT.\n`;
-            prompt += `• Contextualizados para ${nivel} - ${ciclo}.\n`;
-            prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'no especificado'}" cuando sea pertinente.\n`;
-            prompt += `• Variados en tipo de evidencia (productos, desempeños, conocimientos).\n\n`;
-            
-            if (todosIndicadoresLogro.length > 0) {
-                prompt += `📊 EJEMPLO PARA EL PRIMER INDICADOR: \n`;
-                prompt += `• Indicador de logro: "${todosIndicadoresLogro[0]}"\n`;
-                prompt += `• Eje transversal a integrar: ${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Ciudadanía digital'}\n`;
-                prompt += `• Metodología: ${metodologiaSeleccionada}\n`;
-                prompt += `• Indicadores de evaluación sugeridos: \n`;
-                prompt += `1. [Indicador de evaluación basado en producto]\n`;
-                prompt += `2. [Indicador de evaluación basado en desempeño]\n`;
-                prompt += `3. [Indicador de evaluación basado en conocimiento]\n`;
-                prompt += `• Instrumento sugerido: [Rúbrica/Lista de cotejo]\n\n`;
-            }
-            
-            prompt += `El enfoque debe ser en la visión global del planeamiento y cómo las diferentes semanas se complementan entre sí, integrando siempre el eje transversal, la metodología seleccionada y el indicador de logro.`;
-            
+            // OBSERVACIONES
+            prompt += `Y en el segmento de Observaciones hacer un espacio para anotar el siguiente texto:\n`;
+            prompt += `Observaciones y/o recomendaciones didácticas por nivel:\n\n`;
+            prompt += `Observaciones: En este apartado la persona docente podrá realizar los apuntes que considere necesarios: antes, durante y después de la aplicación del planeamiento didáctico. Por ejemplo: las observaciones sobre los avances en el proceso de recuperación académica, el desarrollo de los saberes disciplinares, las habilidades, las competencias y el contexto, las valoraciones sobre las particularidades del estudiantado, los aprendizajes esperados que quedaron pendientes o se deban retomar, entre otros.`;
+
             document.getElementById('promptText').value = prompt;
             document.getElementById('promptModal').style.display = 'block';
         }
@@ -5414,8 +5341,7 @@
             }
         }
 
-                // ===== FUNCIONES PARA OBTENER DATOS PEDAGÓGICOS =====
-        // FUNCIÓN PARA OBTENER EJES TRANSVERSALES SELECCIONADOS
+        // ===== FUNCIONES PARA OBTENER DATOS PEDAGÓGICOS =====
         function obtenerEjesTransversales() {
             const ejesSeleccionados = Array.from(document.querySelectorAll('input[name="eje"]:checked')).map(cb => cb.value);
             const ejesMap = {
@@ -5427,16 +5353,19 @@
             return ejesSeleccionados.map(eje => ejesMap[eje] || eje);
         }
 
-        // FUNCIÓN PARA OBTENER METODOLOGÍA ACTIVA
         function obtenerMetodologiaActiva() {
-            const metodo = document.getElementById('metodologiaActiva').value;
+            let metodo = document.getElementById('metodologiaActiva').value;
+            if (metodo === 'otra') {
+                metodo = document.getElementById('metodologiaPersonalizada').value || 'Otra metodología';
+            }
+            
             const metodologiasMap = {
-                'ABJ': 'Aprendizaje basado en juegos (ABJ) - 7 fases',
-                'ABR': 'Aprendizaje basado en retos (ABR) - 3 fases',
-                'APD': 'Aprendizaje Pensamiento por Diseño (APD) - 5 fases'
+                'ABJ': 'Aprendizaje basado en juegos (ABJ)',
+                'ABR': 'Aprendizaje basado en retos (ABR)',
+                'APD': 'Aprendizaje Pensamiento por Diseño (APD)'
             };
             
-            return metodo ? metodologiasMap[metodo] || metodo : 'No especificada';
+            return metodo ? (metodologiasMap[metodo] || metodo) : 'Pendiente';
         }
 
         // Función para mostrar mensajes temporales
@@ -5496,8 +5425,7 @@
             alert('Prompt de semana copiado al portapapeles');
         }
 
-        // REEMPLAZA LA FUNCIÓN generarPromptSemana EXISTENTE
-        // Busca la función original y cámbiala por esta:
+        // ✅ FUNCIÓN DEPURADA PARA PROMPT POR SEMANA
         function generarPromptSemana(numeroSemana) {
             const semana = semanas[numeroSemana-1];
             const ciclo = document.getElementById('ciclo').value;
@@ -5524,33 +5452,36 @@
             prompt += `📅 Periodo: ${semana.lecciones}\n`;
             prompt += `🎯 Áreas: ${semana.areas.join(', ')}\n\n`;
 
-            // ✅ NUEVO: INCLUIR EJES Y METODOLOGÍA
-            if (ejesSeleccionados.length > 0) {
-                prompt += `🎯 Eje(s) transversal(es): ${ejesSeleccionados.join(', ')}\n`;
-            }
-            prompt += `🎓 Metodología activa: ${metodologiaSeleccionada}\n\n`;
+            // EJES Y METODOLOGÍA
+            prompt += `🎯 Eje(s) transversal(es): ${ejesSeleccionados.length > 0 ? ejesSeleccionados.join(', ') : 'No seleccionado'}\n`;
+            prompt += `🎓 Metodología activa: ${metodologiaSeleccionada}\n`;
+            prompt += `      Fase: ${metodologiaSeleccionada !== 'Pendiente' ? 'Se completa automáticamente según metodología' : 'Pendiente'}\n\n`;
 
-            // INDICADORES DE LOGRO (NUEVA SECCIÓN)
+            // INDICADORES DE LOGRO
+            prompt += `🎯 INDICADORES DE LOGRO SELECCIONADOS:\n`;
             if (indicadoresLogro.length > 0) {
-                prompt += `🎯 INDICADORES DE LOGRO SELECCIONADOS:\n`;
                 indicadoresLogro.forEach((indicador, index) => {
                     prompt += `${index + 1}. ${indicador}\n`;
                 });
-                prompt += `\n`;
+            } else {
+                prompt += `No se han seleccionado indicadores de logro\n`;
             }
+            prompt += `\n`;
             
             // SABERES CONCEPTUALES
+            prompt += `📚 SABERES CONCEPTUALES:\n`;
             if (semana.saberes.length > 0) {
-                prompt += `📚 SABERES CONCEPTUALES:\n`;
                 semana.saberes.forEach(saber => {
                     prompt += `• ${saber}\n`;
                 });
-                prompt += `\n`;
+            } else {
+                prompt += `No se han seleccionado saberes conceptuales\n`;
             }
+            prompt += `\n`;
             
             // SABERES PROCEDIMENTALES
+            prompt += `🛠️ SABERES PROCEDIMENTALES:\n`;
             if (semana.procedimentales.length > 0) {
-                prompt += `🛠️ SABERES PROCEDIMENTALES:\n`;
                 semana.procedimentales.forEach(proc => {
                     const mapping = {
                         'reconoce': '• Reconoce patrones',
@@ -5569,20 +5500,14 @@
                     };
                     prompt += `${mapping[proc] || `• ${proc}`}\n`;
                 });
-                prompt += `\n`;
+            } else {
+                prompt += `No se han seleccionado saberes procedimentales\n`;
             }
+            prompt += `\n`;
 
-            // ✅ NUEVA SECCIÓN: ENFOQUE ESPECÍFICO
-            prompt += `🎓 ENFOQUE PEDAGÓGICO PARA ESTA SEMANA:\n`;
-            if (ejesSeleccionados.length > 0) {
-                prompt += `• Debe integrar el eje transversal: ${ejesSeleccionados.join(', ')}\n`;
-            }
-            prompt += `• Debe aplicar la metodología: ${metodologiaSeleccionada}\n`;
-            prompt += `• Debe contextualizarse para: ${nivel} - ${ciclo}\n\n`;
-            
             // SABERES ACTITUDINALES
+            prompt += `🌟 SABERES ACTITUDINALES:\n`;
             if (semana.actitudinales.length > 0) {
-                prompt += `🌟 SABERES ACTITUDINALES:\n`;
                 semana.actitudinales.forEach(act => {
                     const mapping = {
                         'gusto': '• Gusto por la precisión',
@@ -5592,75 +5517,23 @@
                     };
                     prompt += `${mapping[act] || `• ${act}`}\n`;
                 });
-                prompt += `\n`;
+            } else {
+                prompt += `No se han seleccionado saberes actitudinales\n`;
             }
+            prompt += `\n`;
             
             // SOLICITUD
             prompt += `🤖 SOLICITO:\n`;
-            prompt += `• Genera 3-4 actividades secuenciadas para ${semana.lecciones} que:\n`;
-            prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Por ejemplo Ciudadanía digital'}" en las actividades.\n`;
-            prompt += `• Sigan la estructura de fases de ${metodologiaSeleccionada.split(' - ')[0]}.\n`;
-            prompt += `• Estrategias de mediación que integren al menos dos saberes conceptuales.\n`;
-            prompt += `• Evidencien al menos un saber procedimental y fortalezcan un saber actitudinal, acordes con metodologías activas. .\n`;
-            prompt += `• Incluyan recursos tecnológicos apropiados.\n`;
-            prompt += `• Contengan instrumentos de evaluación formativa alineados con el MEP.\n`;
+            prompt += `• Genera una actividad secuenciada para la ${semana.lecciones} que considere:\n`;
+            prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n`;
+            prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Se completa automáticamente de lo que elige el docente` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n`;
+            prompt += `• Estrategias de mediación que integren los saberes conceptuales.\n`;
+            prompt += `• Evidencien los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
             prompt += `• Sean prácticas y contextualizadas para ${nivel}.\n`;
 
-            // PARTE CRÍTICA: SOLICITUD DE INDICADORES DE EVALUACIÓN
-            prompt += `📋 ESPECÍFICAMENTE NECESITO:\n`;
-            prompt += `• Proporciona un indicador de evaluación para cada indicador de logro listado arriba.\n`;
-            prompt += `• Cada indicador de evaluación debe ser:\n`;
-            prompt += `• Medible y observable.\n`;
-            prompt += `• Alineado con el indicador de logro correspondiente.\n`;
-            prompt += `• Integrar el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Por ejemplo Ciudadanía digital'}" cuando sea pertinente.\n`;
-            prompt += `• Utilizar la metodología ${metodologiaSeleccionada.split(' - ')[0]} como marco.\n`;
-            prompt += `• Formulados en términos de desempeño del estudiante.\n`;
-            prompt += `• Contextualizado para ${nivel}.\n\n`;
-
-            // EJEMPLO PARA GUIAR A LA IA
-            if (indicadoresLogro.length > 0) {
-                prompt += `📝 EJEMPLO DE FORMATO ESPERADO: \n`;
-                prompt += `Para el indicador de logro: "${indicadoresLogro[0]}"\n`;
-                prompt += `Eje transversal: ${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Ciudadanía digital'}\n`;
-                prompt += `Metodología: ${metodologiaSeleccionada}\n`;
-                prompt += `Indicador de evaluación sugerido: "Verbo (Taxonomía de blomm) [acción específica] al [contexto] mediante [evidencia concreta]..."\n\n`;
-            }
-            
-            prompt += `📅 FORMATO DE SECUENCIA DIDÁCTICA:\n`;
-    
-            // ADAPTAR FORMATO SEGÚN METODOLOGÍA
-            if (metodologiaSeleccionada.includes('ABJ')) {
-                prompt += `• Fase 1: Definir el objetivo del juego (conexión con saberes previos).\n`;
-                prompt += `• Fase 2: Incorporar los contenidos en el juego (Estrategia para la actividad).\n`;
-                prompt += `• Fase 3: Proponer un reto (desarrollo de actividades).\n`;
-                prompt += `• Fase 4: Establecer normas (Que debemos respetar y cúal es nuestra guía).\n`;
-                prompt += `• Fase 5: Crear un sistema de incentivos (Motivación,reconocimiento).\n`;
-                prompt += `• Fase 6: Proporcionar realimentación (retroalimentación).\n`;
-                prompt += `• Fase 7: Evaluar los resultados (autoevaluación y coevaluación).\n`;
-            } else if (metodologiaSeleccionada.includes('ABR')) {
-                prompt += `• Fase 1: Presentación del reto (Comprender)\n`;
-                prompt += `• Fase 2: Investigación y desarrollo (Investigar)\n`;
-                prompt += `• Fase 3: Presentación de soluciones (Actuar)\n`;
-            } else if (metodologiaSeleccionada.includes('APD')) {
-                prompt += `• Fase 1: Empatizar (comprensión del problema)\n`;
-                prompt += `• Fase 2: Definir (delimitación del reto)\n`;
-                prompt += `• Fase 3: Idear (generación de soluciones)\n`;
-                prompt += `• Fase 4: Prototipar (construcción de propuesta)\n`;
-                prompt += `• Fase 5: Evaluar (validación y mejora)\n`;
-            } else {
-                prompt += `• Actividad 1: Inicio/Motivación (conexión con saberes previos)\n`;
-                prompt += `• Actividad 2: Desarrollo (construcción de aprendizaje)\n`;
-                prompt += `• Actividad 3: Cierre (consolidación y evaluación)\n`;
-            }
-            
-            prompt += `• Recursos tecnológicos específicos para ${nivel}.\n`;
-            prompt += `• Instrumentos de evaluación (rúbrica, lista de cotejo, etc.).\n`;
-            prompt += `• Proporciona actividades articuladas que permitan alcanzar los indicadores de logro especificados, integrando el eje transversal y la metodología seleccionada.`;
-            
             document.getElementById('promptSemanaText').value = prompt;
             document.getElementById('promptSemanaModal').style.display = 'block';
         }
     </script>
 </body>
-            </html>
-
+</html>
