@@ -1077,7 +1077,7 @@
                     <strong>📋 Instrucciones:</strong><br>
                     1. Copie el prompt completo (Ctrl+A, Ctrl+C).<br>
                     2. Péguelo en su IA preferida (Ctrl+V).<br>
-                    3. Personalice las sugerencias según su contexto.
+                    3. Siéntase en la seguridad de crear su propio prompt, esto es sólo un ejemplo el cual lo puede sobrescribir.
                 </div>
                 
                 <div style="margin: 12px 0;">
@@ -5198,7 +5198,7 @@
             prompt += `Total de indicadores únicos: ${todosIndicadoresLogro.length}\n\n`;
             
             if (todosIndicadoresLogro.length > 0) {
-                prompt += `Anotar automáticamente todos los indicadores de logro que el docente eligió en las semanas:\n`;
+                prompt += `Indicadores de logro que eligió en las semanas:\n`;
                 todosIndicadoresLogro.forEach((indicador, index) => {
                     prompt += `${index + 1}. ${indicador}\n`;
                 });
@@ -5216,13 +5216,6 @@
             }
             prompt += `\n`;
 
-            // ENFOQUE PEDAGÓGICO
-            prompt += `🎓 ENFOQUE PEDAGÓGICO SELECCIONADO:\n`;
-            prompt += `• Eje(s) transversal(es): ${ejesSeleccionados.length > 0 ? ejesSeleccionados.join(', ') : 'No seleccionado'}\n`;
-            prompt += `• Las estrategias deben integrar este(s) eje(s) transversal(es) en todas las actividades.\n`;
-            prompt += `• Metodología activa: ${metodologiaSeleccionada || 'Pendiente de anotar'}\n`;
-            prompt += `• Las actividades deben seguir la estructura de fases de esta metodología. ${metodologiaSeleccionada ? 'Se completa automáticamente' : 'Pendiente de anotar'}\n\n`;
-
             // SOLICITUD
             prompt += `SOLICITO UN RESUMEN GENERAL QUE:\n`;
             prompt += `1. Identifique patrones comunes en todas las semanas mostrando claridad y organización.\n`;
@@ -5235,11 +5228,6 @@
             // INSTRUMENTO SUGERIDO
             prompt += `• Instrumento sugerido según el reglamento de evaluación del Mep: \n`;
             
-            // OBSERVACIONES
-            prompt += `Y en el segmento de Observaciones hacer un espacio para anotar el siguiente texto:\n`;
-            prompt += `Observaciones y/o recomendaciones didácticas por nivel:\n\n`;
-            prompt += `Observaciones: En este apartado la persona docente podrá realizar los apuntes que considere necesarios: antes, durante y después de la aplicación del planeamiento didáctico. Por ejemplo: las observaciones sobre los avances en el proceso de recuperación académica, el desarrollo de los saberes disciplinares, las habilidades, las competencias y el contexto, las valoraciones sobre las particularidades del estudiantado, los aprendizajes esperados que quedaron pendientes o se deban retomar, entre otros.`;
-
             document.getElementById('promptText').value = prompt;
             document.getElementById('promptModal').style.display = 'block';
         }
@@ -5455,7 +5443,7 @@
             // EJES Y METODOLOGÍA
             prompt += `🎯 Eje(s) transversal(es): ${ejesSeleccionados.length > 0 ? ejesSeleccionados.join(', ') : 'No seleccionado'}\n`;
             prompt += `🎓 Metodología activa: ${metodologiaSeleccionada}\n`;
-            prompt += `      Fase: ${metodologiaSeleccionada !== 'Pendiente' ? 'Se completa automáticamente según metodología' : 'Pendiente'}\n\n`;
+            prompt += `      Fase: ${metodologiaSeleccionada !== 'Pendiente' ? 'Redacte la información correspondiente' : 'Pendiente'}\n\n`;
 
             // INDICADORES DE LOGRO
             prompt += `🎯 INDICADORES DE LOGRO SELECCIONADOS:\n`;
@@ -5526,10 +5514,11 @@
             prompt += `🤖 SOLICITO:\n`;
             prompt += `• Genera una actividad secuenciada para la ${semana.lecciones} que considere:\n`;
             prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n`;
-            prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Se completa automáticamente de lo que elige el docente` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n`;
+            prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología de aprendizaje` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n`;
             prompt += `• Estrategias de mediación que integren los saberes conceptuales.\n`;
             prompt += `• Evidencien los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
             prompt += `• Sean prácticas y contextualizadas para ${nivel}.\n`;
+            prompt += `• Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
 
             document.getElementById('promptSemanaText').value = prompt;
             document.getElementById('promptSemanaModal').style.display = 'block';
@@ -5537,3 +5526,4 @@
     </script>
 </body>
 </html>
+
