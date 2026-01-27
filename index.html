@@ -5186,10 +5186,66 @@
             semanas.forEach((semana, index) => {
                 prompt += `SEMANA ${index + 1} (${semana.lecciones}):\n`;
                 prompt += `• Áreas: ${semana.areas.join(', ') || 'No seleccionadas'}\n`;
-                prompt += `• Saberes conceptuales: Globales ya esto lo tiene el programa\n`;
-                prompt += `• Saberes procedimentales: globales ya esto lo tiene el programa\n`;
-                prompt += `• Saberes actitudinales: globales ya esto lo tiene el programa\n`;
-                prompt += `• Indicadores de logro: globales ya esto lo tiene el programa\n`;
+                
+                // ✅ SABERES CONCEPTUALES GLOBALES
+                prompt += `• Saberes conceptuales: `;
+                if (semana.saberes.length > 0) {
+                    prompt += semana.saberes.join(', ');
+                } else {
+                    prompt += 'No seleccionados';
+                }
+                prompt += `\n`;
+                
+                // ✅ SABERES PROCEDIMENTALES GLOBALES
+                prompt += `• Saberes procedimentales: `;
+                if (semana.procedimentales.length > 0) {
+                    const procMap = {
+                        'reconoce': 'Reconoce patrones',
+                        'abstrae': 'Abstrae',
+                        'generaliza': 'Generaliza',
+                        'transfiere': 'Transfiere',
+                        'modulariza': 'Modulariza',
+                        'formula': 'Formula algoritmos',
+                        'remezcla': 'Remezcla',
+                        'depura': 'Depura',
+                        'programa': 'Programa',
+                        'comunica': 'Comunica',
+                        'colabora': 'Colabora',
+                        'piensa': 'Piensa creativamente',
+                        'maneja': 'Maneja tecnologías éticamente'
+                    };
+                    const procNombres = semana.procedimentales.map(p => procMap[p] || p);
+                    prompt += procNombres.join(', ');
+                } else {
+                    prompt += 'No seleccionados';
+                }
+                prompt += `\n`;
+                
+                // ✅ SABERES ACTITUDINALES GLOBALES
+                prompt += `• Saberes actitudinales: `;
+                if (semana.actitudinales.length > 0) {
+                    const actMap = {
+                        'gusto': 'Gusto por la precisión',
+                        'aprender': 'Aprender del error',
+                        'flexibilidad': 'Flexibilidad',
+                        'tolerancia': 'Tolerancia a la frustración'
+                    };
+                    const actNombres = semana.actitudinales.map(a => actMap[a] || a);
+                    prompt += actNombres.join(', ');
+                } else {
+                    prompt += 'No seleccionados';
+                }
+                prompt += `\n`;
+                
+                // ✅ INDICADORES DE LOGRO
+                prompt += `• Indicadores de logro: `;
+                const indicadoresSemana = obtenerIndicadoresLogroSemana(index + 1);
+                if (indicadoresSemana.length > 0) {
+                    prompt += indicadoresSemana.join(' | ');
+                } else {
+                    prompt += 'No seleccionados';
+                }
+                prompt += `\n`;
             });
             prompt += `\n`;
 
@@ -5526,6 +5582,7 @@
     </script>
 </body>
 </html>
+
 
 
 
