@@ -5443,7 +5443,7 @@
             // EJES Y METODOLOGÍA
             prompt += `🎯 Eje(s) transversal(es): ${ejesSeleccionados.length > 0 ? ejesSeleccionados.join(', ') : 'No seleccionado'}\n`;
             prompt += `🎓 Metodología activa: ${metodologiaSeleccionada}\n`;
-            prompt += `      Fase: ${metodologiaSeleccionada !== 'Pendiente' ? 'Redacte la información correspondiente' : 'Pendiente'}\n\n`;
+            prompt += `      Fase: ${metodologiaSeleccionada !== 'Pendiente' ? 'Redacte la información correspondiente según la fase que desee implementar.' : 'Pendiente'}\n\n`;
 
             // INDICADORES DE LOGRO
             prompt += `🎯 INDICADORES DE LOGRO SELECCIONADOS:\n`;
@@ -5514,7 +5514,7 @@
             prompt += `🤖 SOLICITO:\n`;
             prompt += `• Genera una actividad secuenciada para la ${semana.lecciones} que considere:\n`;
             prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n`;
-            prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología de aprendizaje` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n`;
+            prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología activa y la fase que el docente desee integrar.` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n`;
             prompt += `• Estrategias de mediación que integren los saberes conceptuales.\n`;
             prompt += `• Evidencien los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
             prompt += `• Sean prácticas y contextualizadas para ${nivel}.\n`;
@@ -5526,4 +5526,5 @@
     </script>
 </body>
 </html>
+
 
