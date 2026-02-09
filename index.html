@@ -804,7 +804,7 @@
                     <strong>Ciclos:</strong><br>
                     <select id="ciclo" class="select-field" onchange="actualizarNiveles()">
                         <option value="">Seleccionar</option>
-                        <option value="Materno Infantil (Grupo Interactivo II) y Transición">Materno Infantil/Transición</option>
+                        <option value="Materno Infantil/Transición">Materno Infantil/Transición</option>
                         <option value="I Ciclo">I Ciclo</option>
                         <option value="II Ciclo">II Ciclo</option>
                         <option value="III Ciclo">III Ciclo</option>
@@ -2394,8 +2394,8 @@
             
             nivelSelect.innerHTML = '<option value="">Seleccione nivel</option>';
             
-            if (ciclo === 'Materno Infantil (Grupo Interactivo II) y Transición') {
-                nivelSelect.innerHTML += '<option value="Grupo Interactivo II y Transición">Grupo Interactivo II y Transición</option>';
+            if (ciclo === 'Materno Infantil/Tansición') {
+                nivelSelect.innerHTML += '<option value="Materno Infantil y Transición">Grupo Interactivo II y Transición</option>';
             } else if (ciclo === 'I Ciclo') {
                 nivelSelect.innerHTML += '<option value="1°">1°</option>';
                 nivelSelect.innerHTML += '<option value="2°">2°</option>';
@@ -5582,6 +5582,7 @@
     </script>
 </body>
 </html>
+
 
 
 
