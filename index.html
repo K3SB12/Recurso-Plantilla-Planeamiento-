@@ -1099,7 +1099,7 @@
         <script>
             const PNFT_DATA = {
             // ========== MATERNO INFANTIL / TRANSICIÓN ==========
-            "Materno Infantil/Transición": {
+            "0°": {
                 "Módulo 1": {
                 "Apropiación tecnológica y Digital": {
                     saberes: [
@@ -2395,7 +2395,7 @@
             nivelSelect.innerHTML = '<option value="">Seleccione nivel</option>';
             
             if (ciclo === 'Materno Infantil/Transición') {
-                nivelSelect.innerHTML += '<option value="Grupo Interactivo II y Transición">Grupo Interactivo II y Transición</option>';
+                nivelSelect.innerHTML += '<option value="0°">"Grupo Interactivo II y Transición"</option>';
             } else if (ciclo === 'I Ciclo') {
                 nivelSelect.innerHTML += '<option value="1°">1°</option>';
                 nivelSelect.innerHTML += '<option value="2°">2°</option>';
@@ -2850,11 +2850,11 @@
                 }
                 
                 // Buscar en Módulo 2
-                if (!encontrado && PNFT_DATA[nivel]["Módulo 2"]) {
+                if (!encontroSaberes && PNFT_DATA[nivel]["Módulo 2"]) {
                     for (const moduloArea in PNFT_DATA[nivel]["Módulo 2"]) {
                         const saberData = PNFT_DATA[nivel]["Módulo 2"][moduloArea].saberes.find(s => s.nombre === saber);
                         if (saberData) {
-                            encontrado = true;
+                            encontroSaberes = true;
                             saberData.indicadores.forEach(indicador => {
                                 html += `
                                     <div style="margin-bottom: 6px; padding: 4px 0; border-bottom: 1px dotted #ddd; font-size: 11px;">
@@ -5274,7 +5274,7 @@
 
             // SOLICITUD
             prompt += `SOLICITO UN RESUMEN GENERAL QUE:\n`;
-            prompt += `1. Identifique patrones comunes en todas las semanas mostrando claridad y organización.\n`;
+            prompt += `1. Distribuye los indicadores de logro por la cantidad de semanas y lecciones del ciclo, nivel y Módulo seleccionado, en una tabla que incluya: semana, fecha aproximada, lección, saber conceptual, Metodología y el indicador de evaluación sugerido. Mostrando claridad y organización.\n`;
             prompt += `2. Sugiera estrategias transversales aplicables que integren el/los eje(s) transversal(es) seleccionado(s).\n`;
             prompt += `3. Aplique la metodología ${metodologiaSeleccionada || 'Pendiente'} en las propuestas de actividades.\n`;
             prompt += `4. Estrategias de mediación que integren, den secuencialidad coherente y articulación de los saberes conceptuales.\n`;
@@ -5568,12 +5568,13 @@
             
             // SOLICITUD
             prompt += `🤖 SOLICITO:\n`;
-            prompt += `• Genera una actividad secuenciada para la ${semana.lecciones} que considere:\n`;
+            prompt += `• Genera una actividad que tenga inicio, desarrollo y cierre para las ${semana.lecciones} que considere:\n`;
+            prompt += `• Articular los saberes conceptuales e indicadores de logro del módulo seleccionado.\n`;
+            prompt += `• Que las actividades sean prácticas y contextualizadas para el nivel seleccionado.\n`;
             prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n`;
             prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología activa y la fase que el docente desee integrar` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n`;
             prompt += `• Estrategias de mediación que integren los saberes conceptuales.\n`;
             prompt += `• Evidencien los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
-            prompt += `• Sean prácticas y contextualizadas para ${nivel}.\n`;
             prompt += `• Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
 
             document.getElementById('promptSemanaText').value = prompt;
@@ -5582,15 +5583,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
