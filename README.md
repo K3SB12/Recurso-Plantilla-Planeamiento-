@@ -6,9 +6,10 @@ https://k3sb12.github.io/Recurso-Plantilla-Planeamiento-/
 
 💾 **DESCARGAR VERSIÓN OFFLINE:**
 1. En la herramienta, haz clic en el "botón verde con la flecha blanca" a la par de 💾 Guardar. 
-2. Selecciona "💻 Guardar versión offline".
+2. Selecciona "💻 Descargar versión offline".Nota: Esta plantilla se descarga vacía.
 3. Guarda el archivo .html donde quieras.
-4. Ábrelo con cualquier navegador (funciona sin internet).
+4. Ábrelo con cualquier navegador (funciona sin internet). Recuerda dar click derecho y abrirla con
+   el navegador de preferencia.
 
 📱 **CARACTERÍSTICAS:**
 ✅ Planificación por semanas con saberes del PNFT.
@@ -97,7 +98,7 @@ Se invita a la comunidad educativa a:
 
 ## 📞 CONTACTO Y CONSULTAS
 Para consultas sobre esta licencia:
-- **Correo:** [kevin.sanchez.bogarin@mep.go.cr]
+- **Correo:** gestion.curricularFT@mep.go.cr
 - **Portal:** [https://k3sb12.github.io/Recurso-Plantilla-Planeamiento-/]
 - **Registro:** Ministerio de Educación Pública - Departamento de Gestión Curricular para la Formación Tecnológica.
 
