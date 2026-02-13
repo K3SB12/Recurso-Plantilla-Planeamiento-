@@ -5273,13 +5273,19 @@
             prompt += `\n`;
 
             // SOLICITUD
-            prompt += `SOLICITO UN RESUMEN GENERAL QUE:\n`;
-            prompt += `1. Distribuye los indicadores de logro por la cantidad de semanas y lecciones del ciclo, nivel y Módulo seleccionado, en una tabla que incluya: semana, fecha aproximada, lección, saber conceptual, Metodología y el indicador de evaluación sugerido. Mostrando claridad y organización.\n`;
-            prompt += `2. Sugiera estrategias transversales aplicables que integren el/los eje(s) transversal(es) seleccionado(s).\n`;
-            prompt += `3. Aplique la metodología ${metodologiaSeleccionada || 'Pendiente'} en las propuestas de actividades.\n`;
-            prompt += `4. Estrategias de mediación que integren, den secuencialidad coherente y articulación de los saberes conceptuales.\n`;
-            prompt += `5. Evidenciar los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
-            prompt += `6. Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
+            
+            prompt += `🤖 Sugerencia: Para mejores resultados entre más específico y detallado sea cada campo, mejor será la calidad del prompt generado. Puedes editar el prompt antes de compartirlo con tu herramienta de IA favorita.\n\n`;
+            prompt += `• Define la acción principal que deseas que se realice, ¿Qué acción debe realizar la IA? Ejemplo: Crear una actividad interactiva, Diseñar una rúbrica: \n\n`;
+            prompt += `• Describe el entorno educativo y temático, ¿En qué áreas de conocimiento o situación? Ejemplo: Apropiación Tecnológica y Digital, Programación y Algoritmos, temas Computadora, Entornos de programación: \n\n`;
+            prompt += `• Especifica el público objetivo y sus características: \n\n`;
+            prompt += `• Añade requisitos específicos, formato y restricciones por ejemplo ¿Qué especificaciones adicionales? Ejemplo: Trabajo colaborativo, recursos digitales, semanas de duración, incluir evaluación formativa o sumativa:  \n\n`;
+            prompt += `• Define el objetivo pedagógico que se busca lograr, ¿Cuál es el objetivo de aprendizaje? Ejemplo: Desarrollar pensamiento crítico, fortalecer comprensión lectora:  \n\n`;
+            prompt += `• Distribuye los indicadores de logro por la cantidad de semanas y lecciones del ciclo, nivel y Módulo seleccionado, en una tabla que incluya: semana, fecha aproximada, lección, saber conceptual, Metodología y el indicador de evaluación sugerido. Mostrando claridad y organización.\n`;
+            prompt += `• Sugiera estrategias transversales aplicables que integren el/los eje(s) transversal(es) seleccionado(s).\n`;
+            prompt += `• Aplique la metodología ${metodologiaSeleccionada || 'Pendiente'} en las propuestas de actividades.\n`;
+            prompt += `• Estrategias de mediación que integren, den secuencialidad coherente y articulación de los saberes conceptuales.\n`;
+            prompt += `• Evidenciar los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
+            prompt += `• Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
 
             // INSTRUMENTO SUGERIDO
             prompt += `• Instrumento sugerido según el reglamento de evaluación del Mep: \n`;
@@ -5567,14 +5573,17 @@
             prompt += `\n`;
             
             // SOLICITUD
-            prompt += `🤖 SOLICITO:\n`;
-            prompt += `• Genera una actividad que tenga inicio, desarrollo y cierre para las ${semana.lecciones} que considere:\n`;
-            prompt += `• Articular los saberes conceptuales e indicadores de logro del módulo seleccionado.\n`;
-            prompt += `• Que las actividades sean prácticas y contextualizadas para el nivel seleccionado.\n`;
-            prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n`;
-            prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología activa y la fase que el docente desee integrar` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n`;
-            prompt += `• Estrategias de mediación que integren los saberes conceptuales.\n`;
-            prompt += `• Evidencien los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
+            prompt += `🤖 Sugerencia: Para mejores resultados entre más específico y detallado sea cada campo, mejor será la calidad del prompt generado. Puedes editar el prompt antes de compartirlo con tu herramienta de IA favorita.\n\n`;
+            prompt += `• Define la acción principal que deseas que se realice, ¿Qué acción debe realizar la IA? Ejemplo: Crear una actividad interactiva, Diseñar una rúbrica: \n\n`;
+            prompt += `• Describe el entorno educativo y temático, ¿En qué área de conocimiento o situación? Ejemplo: Programación y Algoritmos, tema de variables:  \n\n`;
+            prompt += `• Especifica el público objetivo y sus características: \n\n`;
+            prompt += `• Añade requisitos específicos, formato y restricciones por ejemplo ¿Qué especificaciones adicionales? Ejemplo: Trabajo colaborativo, recursos digitales, 40 minutos de duración, incluir evaluación formativa o sumativa: \n\n`;
+            prompt += `• Define el objetivo pedagógico que se busca lograr, ¿Cuál es el objetivo de aprendizaje? Ejemplo: Desarrollar pensamiento crítico, fortalecer comprensión lectora:  \n\n`;
+            prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n\n`;
+            prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología activa y la fase que el docente desee integrar` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n\n`;
+            prompt += `• Estrategias de mediación que integren los saberes conceptuales.\n\n`;
+            prompt += `• Evidencien los saberes procedimentales y fortalezcan los saberes actitudinales.\n\n`;
+            prompt += `• Sean prácticas y contextualizadas para ${nivel}.\n\n`;
             prompt += `• Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
 
             document.getElementById('promptSemanaText').value = prompt;
@@ -5583,3 +5592,4 @@
     </script>
 </body>
 </html>
+
