@@ -5578,12 +5578,12 @@
             prompt += `• Describe el entorno educativo y temático, ¿En qué área de conocimiento o situación? Ejemplo: Programación y Algoritmos, tema de variables:  \n\n`;
             prompt += `• Especifica el público objetivo y sus características: \n\n`;
             prompt += `• Añade requisitos específicos, formato y restricciones por ejemplo ¿Qué especificaciones adicionales? Ejemplo: Trabajo colaborativo, recursos digitales, 40 minutos de duración, incluir evaluación formativa o sumativa: \n\n`;
-            prompt += `• Define el objetivo pedagógico que se busca lograr, ¿Cuál es el objetivo de aprendizaje? Ejemplo: Desarrollar pensamiento crítico, fortalecer comprensión lectora:  \n\n`;
-            prompt += `• Integren el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n\n`;
+            prompt += `• Integra el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n\n`;
             prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología activa y la fase que el docente desee integrar` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n\n`;
-            prompt += `• Estrategias de mediación que integren los saberes conceptuales.\n\n`;
-            prompt += `• Evidencien los saberes procedimentales y fortalezcan los saberes actitudinales.\n\n`;
-            prompt += `• Sean prácticas y contextualizadas para ${nivel}.\n\n`;
+            prompt += `• Determina con base en los indicadores de logro como puede alcanzar las competencias el estudiante.\n\n`;
+            prompt += `• Estrategias de mediación que integren y articulen en las lecciones de Formación Tecnológica (PNFT) los saberes conceptuales.\n\n`;
+            prompt += `• Evidencia los saberes procedimentales y fortalece los saberes actitudinales.\n\n`;
+            prompt += `• Actividades que sean prácticas y contextualizadas para ${nivel}.\n\n`;
             prompt += `• Redactar un indicador de evaluación por cada indicador de logro que se haya seleccionado.\n\n`;
 
             document.getElementById('promptSemanaText').value = prompt;
@@ -5592,4 +5592,5 @@
     </script>
 </body>
 </html>
+
 
