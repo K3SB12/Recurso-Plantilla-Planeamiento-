@@ -5581,9 +5581,10 @@
             prompt += `• Integra el eje transversal "${ejesSeleccionados.length > 0 ? ejesSeleccionados[0] : 'Pendiente'}" en las actividades.\n\n`;
             prompt += `• ${metodologiaSeleccionada !== 'Pendiente' ? `Incluye la metodología activa y la fase que el docente desee integrar` : 'Escribir Pendiente metodología en caso de que no haya anota ninguna'}.\n\n`;
             prompt += `• Determina con base en los indicadores de logro como puede alcanzar las competencias el estudiante.\n\n`;
-            prompt += `• Estrategias de mediación que integren y articulen los saberes conceptuales, procedimentales, actitudinales e indicadores en las lecciones de Formación Tecnológica con la estructura de inicio, desarrollo y cierre segun el formato mep para el (PNFT).\n\n`;
-            prompt += `• Evidencia los saberes procedimentales y fortalece los saberes actitudinales.\n\n`;
+            prompt += `• Estrategias de mediación que integren y articulen los saberes conceptuales, procedimentales, actitudinales e indicadores con la estructura MEP inicio, desarrollo y cierre para las lecciones de Formación Tecnológica (duración de cada lección 40 minutos).\n\n`;
+            prompt += `• Evidencia la progresión de habilidades con los saberes procedimentales y fortalece los saberes actitudinales.\n\n`;
             prompt += `• Actividades que sean prácticas y contextualizadas para ${nivel}.\n\n`;
+            prompt += `• Proponga adaptaciones para diversidad de estudiantado.\n\n`;
             prompt += `• Redactar un indicador de evaluación en tercera persona por cada indicador de logro que se haya seleccionado en formato mep según la asignatura.\n\n`;
 
             document.getElementById('promptSemanaText').value = prompt;
@@ -5592,6 +5593,7 @@
     </script>
 </body>
 </html>
+
 
 
 
