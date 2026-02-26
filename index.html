@@ -5285,12 +5285,14 @@
             prompt += `• Aplique la metodología ${metodologiaSeleccionada || 'Pendiente'} en las propuestas de actividades.\n`;
             prompt += `• Redacta para cada semana estrategias de mediación que se integren con la estructura de inicio, desarrollo y cierre articulando los saberes conceptuales, procedimentales, actitudinales e indicadores seleccionados mediante una progresión y secuencialidad coherente.\n`;
             prompt += `• Evidenciar los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
-            prompt += `• Redacta dos indicadores de evaluación a partir de los indicadores de logro seleccionados, que no sea una simple transformación verbal. Debe incluir:
-                        – Un verbo observable y medible.
-                        – El contenido específico del logro.
-                        – La condición o contexto en que se ejecuta la acción.
-                        – La evidencia concreta que permitirá verificar el desempeño (producto, acción o manifestación observable).
-                        No incorporar contenidos nuevos. Redactar en tercera persona singular, en una sola oración clara y objetiva.\n\n`;
+            prompt += `• A partir de cada indicador de logro seleccionado, redactar dos propuestas distintas de indicador de evaluación en tercera persona singular.
+                            -Cada propuesta debe incluir un verbo observable y medible, mantener coherencia directa con el indicador de logro y no agregar contenidos nuevos.
+                            -No debe limitarse a una simple transformación verbal.
+                            -Redactar en una sola oración clara y objetiva.\n\n`;
+
+            prompt += `📝 Nota para el docente:
+                
+                Las dos propuestas generadas tienen como finalidad facilitar el análisis y la comparación técnica. Revise ambas opciones y seleccione aquella que sea más clara, observable, medible y que se ajuste a su contexto.\n\n`;
 
             // INSTRUMENTO SUGERIDO
             prompt += `• Instrumento sugerido según el reglamento de evaluación del Mep: \n`;
@@ -5590,19 +5592,24 @@
             prompt += `• Evidencia la progresión de habilidades con los saberes procedimentales y fortalece los saberes actitudinales.\n\n`;
             prompt += `• Actividades que sean prácticas y contextualizadas para ${nivel}.\n\n`;
             prompt += `• Proponga adaptaciones para diversidad de estudiantado.\n\n`;
-            prompt += `• Redacta dos indicadores de evaluación a partir de los indicadores de logro seleccionados, que no sea una simple transformación verbal. Debe incluir:
-                        – Un verbo observable y medible.
-                        – El contenido específico del logro.
-                        – La condición o contexto en que se ejecuta la acción.
-                        – La evidencia concreta que permitirá verificar el desempeño (producto, acción o manifestación observable).
-                        No incorporar contenidos nuevos. Redactar en tercera persona singular, en una sola oración clara y objetiva.\n\n`;
+            prompt += `• A partir de cada indicador de logro seleccionado, redactar dos propuestas distintas de indicador de evaluación en tercera persona singular.
+                            -Cada propuesta debe incluir un verbo observable y medible, mantener coherencia directa con el indicador de logro y no agregar contenidos nuevos.
+                            -No debe limitarse a una simple transformación verbal.
+                            -Redactar en una sola oración clara y objetiva.\n\n`;
 
-            document.getElementById('promptSemanaText').value = prompt;
+             prompt += `📝 Nota para el docente:
+                
+                Las dos propuestas generadas tienen como finalidad facilitar el análisis y la comparación técnica. Revise ambas opciones y seleccione aquella que sea más clara, observable, medible y que se ajuste a su contexto.\n\n`;
+
+                
+        
+                    document.getElementById('promptSemanaText').value = prompt;
             document.getElementById('promptSemanaModal').style.display = 'block';
         }
     </script>
 </body>
 </html>
+
 
 
 
