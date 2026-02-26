@@ -5285,7 +5285,12 @@
             prompt += `• Aplique la metodología ${metodologiaSeleccionada || 'Pendiente'} en las propuestas de actividades.\n`;
             prompt += `• Redacta para cada semana estrategias de mediación que se integren con la estructura de inicio, desarrollo y cierre articulando los saberes conceptuales, procedimentales, actitudinales e indicadores seleccionados mediante una progresión y secuencialidad coherente.\n`;
             prompt += `• Evidenciar los saberes procedimentales y fortalezcan los saberes actitudinales.\n`;
-            prompt += `• Redactar un indicador de evaluación en tercera persona por cada indicador de logro que se haya seleccionado en formato mep según la asignatura.\n\n`;
+            prompt += `• A partir de los indicadores de logro seleccionados, redactar dos indicadores de evaluación que no sea una simple transformación verbal. Debe incluir:
+                        – Un verbo observable y medible.
+                        – El contenido específico del logro.
+                        – La condición o contexto en que se ejecuta la acción.
+                        – La evidencia concreta que permitirá verificar el desempeño (producto, acción o manifestación observable).
+                        No incorporar contenidos nuevos. Redactar en tercera persona singular, en una sola oración clara y objetiva.\n\n`;
 
             // INSTRUMENTO SUGERIDO
             prompt += `• Instrumento sugerido según el reglamento de evaluación del Mep: \n`;
@@ -5585,7 +5590,12 @@
             prompt += `• Evidencia la progresión de habilidades con los saberes procedimentales y fortalece los saberes actitudinales.\n\n`;
             prompt += `• Actividades que sean prácticas y contextualizadas para ${nivel}.\n\n`;
             prompt += `• Proponga adaptaciones para diversidad de estudiantado.\n\n`;
-            prompt += `• Redactar un indicador de evaluación en tercera persona por cada indicador de logro que se haya seleccionado en formato mep según la asignatura.\n\n`;
+            prompt += `• A partir de los indicadores de logro seleccionados, redactar dos indicadores de evaluación que no sea una simple transformación verbal. Debe incluir:
+                        – Un verbo observable y medible.
+                        – El contenido específico del logro.
+                        – La condición o contexto en que se ejecuta la acción.
+                        – La evidencia concreta que permitirá verificar el desempeño (producto, acción o manifestación observable).
+                        No incorporar contenidos nuevos. Redactar en tercera persona singular, en una sola oración clara y objetiva.\n\n`;
 
             document.getElementById('promptSemanaText').value = prompt;
             document.getElementById('promptSemanaModal').style.display = 'block';
@@ -5593,6 +5603,7 @@
     </script>
 </body>
 </html>
+
 
 
 
